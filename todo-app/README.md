@@ -14,3 +14,6 @@ https://dev.to/shivabhusal/step-to-step-guide-to-build-a-todo-app-with-react-and
 * The second tab is to display all data (from device storage) of the app
 * Send data to firebase storage or google cloud
 * Authentication ?
+
+## Docs
+* https://reactjs.org/docs/hooks-intro.html

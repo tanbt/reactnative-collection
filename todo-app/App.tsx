@@ -1,20 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
 export default function App() {
+  const [value, onChangeText] = useState("");
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Welcome to my Todo app!</Text>
-      <TextInput style={styles.input} placeholder="Enter a task"
-      onChangeText={text => onChangeText(text)}/>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter a task"
+        onChangeText={(text) => onChangeText(text)}
+      />
+      <Text>{value != "" ? "You entered: " + value : ""}</Text>
       <StatusBar style="auto" />
     </View>
   );
-}
-
-const onChangeText = (text: String) => {
-  console.log("Receive text: " + text);
 }
 
 const styles = StyleSheet.create({
