@@ -12,9 +12,9 @@ export default function App() {
     <View style={styles.container}>
       <Text h3>Welcome to my Todo app!</Text>
 
-      <View style={styles.inputArea}>
+      <View style={{ flexDirection: "row" }}>
         <Input
-          inputStyle={styles.inputStyle}
+          inputStyle={{ padding: 10 }}
           placeholder="Enter a task"
           onChangeText={(val) => onChangeText(val)}
         />
@@ -42,11 +42,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 5,
-  },
-  inputArea: {
-    flexDirection: "row",
-  },
-  inputStyle: {
-    padding: 10,
   },
 });
