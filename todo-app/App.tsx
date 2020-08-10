@@ -3,10 +3,20 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
-import { Input, Button } from "react-native-elements";
+import { CheckBox, ListItem, Input, Button } from "react-native-elements";
 
 export default function App() {
   const [value, onChangeText] = useState("");
+  const taskList = [
+    {
+      name: "My first task",
+      isDone: true,
+    },
+    {
+      name: "My very long name task",
+      isDone: false,
+    },
+  ];
 
   return (
     <View style={styles.container}>
@@ -26,6 +36,22 @@ export default function App() {
       </View>
 
       <Text>{value != "" ? "You entered: " + value : ""}</Text>
+      <View>
+        {taskList.map((item, i) => (
+          <ListItem
+            key={i}
+            title={item.name}
+            rightElement={
+              <CheckBox
+                checked={item.isDone}
+                onPress={() => updateTaskStatus(i)}
+              />
+            }
+            bottomDivider
+          />
+        ))}
+      </View>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -33,6 +59,10 @@ export default function App() {
 
 const addTask = () => {
   console.log("adding task...");
+};
+
+const updateTaskStatus = (index: number) => {
+  console.log("updating task " + index);
 };
 
 const styles = StyleSheet.create({
