@@ -38,15 +38,13 @@ export default function App() {
       <Text>{value != "" ? "You entered: " + value : ""}</Text>
       <View>
         {taskList.map((item, i) => (
-          <ListItem
+          <ListItem containerStyle={styles.listItemStyle}
             key={i}
             title={item.name}
-            rightElement={
-              <CheckBox
-                checked={item.isDone}
-                onPress={() => updateTaskStatus(i)}
-              />
-            }
+            checkBox={{
+              checked: item.isDone,
+              onPress: () => updateTaskStatus(i)
+            }}
             bottomDivider
           />
         ))}
@@ -73,4 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
   },
+  listItemStyle: { // reuse = better performance
+    alignSelf: "auto"
+  }
 });
