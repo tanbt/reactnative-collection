@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
-import { Input } from "react-native-elements";
+import { Input, Button } from "react-native-elements";
 
 export default function App() {
   const [value, onChangeText] = useState("");
@@ -12,18 +12,28 @@ export default function App() {
     <View style={styles.container}>
       <Text h3>Welcome to my Todo app!</Text>
 
-      <Input
-        inputStyle={styles.inputStyle}
-        placeholder="Enter a task"
-        onChangeText={(val) => onChangeText(val)}
-        rightIcon={<Icon name="add-to-list" size={24} color="black" />}
-      />
+      <View style={styles.inputArea}>
+        <Input
+          inputStyle={styles.inputStyle}
+          placeholder="Enter a task"
+          onChangeText={(val) => onChangeText(val)}
+        />
+        <Button
+          icon={<Icon name="add-to-list" size={24} color="black" />}
+          onPress={addTask}
+          type="clear"
+        />
+      </View>
 
       <Text>{value != "" ? "You entered: " + value : ""}</Text>
       <StatusBar style="auto" />
     </View>
   );
 }
+
+const addTask = () => {
+  console.log("adding task...");
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +42,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 5,
+  },
+  inputArea: {
+    flexDirection: "row",
   },
   inputStyle: {
     padding: 10,
