@@ -15,5 +15,8 @@ https://dev.to/shivabhusal/step-to-step-guide-to-build-a-todo-app-with-react-and
 * Send data to firebase storage or google cloud
 * Authentication ?
 
+## Notes
+* Use https://oblador.github.io/react-native-vector-icons/ to search for *available* icons
+
 ## Docs
 * https://reactjs.org/docs/hooks-intro.html

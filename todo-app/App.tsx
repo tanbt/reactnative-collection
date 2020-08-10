@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/Entypo";
 import { Input } from "react-native-elements";
 
 export default function App() {
@@ -12,10 +12,11 @@ export default function App() {
     <View style={styles.container}>
       <Text h3>Welcome to my Todo app!</Text>
 
-      <Input inputStyle={styles.inputStyle}
+      <Input
+        inputStyle={styles.inputStyle}
         placeholder="Enter a task"
-        leftIcon={{ type: "font-awesome", name: "edit" }}
         onChangeText={(val) => onChangeText(val)}
+        rightIcon={<Icon name="add-to-list" size={24} color="black" />}
       />
 
       <Text>{value != "" ? "You entered: " + value : ""}</Text>
@@ -33,6 +34,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   inputStyle: {
-    padding: 10
-  }
+    padding: 10,
+  },
 });
