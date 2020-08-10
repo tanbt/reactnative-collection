@@ -5,18 +5,15 @@ import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
 import { CheckBox, ListItem, Input, Button } from "react-native-elements";
 
+var taskList = [
+  {
+    name: "My initial task",
+    isDone: true,
+  },
+];
+
 export default function App() {
   const [value, onChangeText] = useState("");
-  const taskList = [
-    {
-      name: "My first task",
-      isDone: true,
-    },
-    {
-      name: "My very long name task",
-      isDone: false,
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -30,7 +27,7 @@ export default function App() {
         />
         <Button
           icon={<Icon name="add-to-list" size={24} color="black" />}
-          onPress={addTask}
+          onPress={() => addTask(value)}
           type="clear"
         />
       </View>
@@ -38,12 +35,13 @@ export default function App() {
       <Text>{value != "" ? "You entered: " + value : ""}</Text>
       <View>
         {taskList.map((item, i) => (
-          <ListItem containerStyle={styles.listItemStyle}
+          <ListItem
+            containerStyle={styles.listItemStyle}
             key={i}
             title={item.name}
             checkBox={{
               checked: item.isDone,
-              onPress: () => updateTaskStatus(i)
+              onPress: () => toggleTaskStatus(i),
             }}
             bottomDivider
           />
@@ -55,12 +53,12 @@ export default function App() {
   );
 }
 
-const addTask = () => {
-  console.log("adding task...");
+const addTask = (value: string) => {
+  taskList = taskList.concat({ name: value, isDone: false });
 };
 
-const updateTaskStatus = (index: number) => {
-  console.log("updating task " + index);
+const toggleTaskStatus = (index: number) => {
+  taskList[index].isDone = !taskList[index].isDone;
 };
 
 const styles = StyleSheet.create({
@@ -71,7 +69,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
   },
-  listItemStyle: { // reuse = better performance
-    alignSelf: "auto"
-  }
+  listItemStyle: {
+    // reuse = better performance
+    alignSelf: "auto",
+  },
 });
