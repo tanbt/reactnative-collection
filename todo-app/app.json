@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "todo-app",
+    "name": "Todo App",
     "slug": "todo-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,6 +21,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
