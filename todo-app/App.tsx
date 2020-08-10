@@ -1,18 +1,23 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Text } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Input } from "react-native-elements";
 
 export default function App() {
   const [value, onChangeText] = useState("");
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Welcome to my Todo app!</Text>
-      <TextInput
-        style={styles.input}
+      <Text h3>Welcome to my Todo app!</Text>
+
+      <Input inputStyle={styles.inputStyle}
         placeholder="Enter a task"
-        onChangeText={(text) => onChangeText(text)}
+        leftIcon={{ type: "font-awesome", name: "edit" }}
+        onChangeText={(val) => onChangeText(val)}
       />
+
       <Text>{value != "" ? "You entered: " + value : ""}</Text>
       <StatusBar style="auto" />
     </View>
@@ -27,15 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
   },
-  heading: {
-    fontSize: 25,
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "gray",
-    height: 40,
-    alignSelf: "stretch",
-    padding: 5,
-  },
+  inputStyle: {
+    padding: 10
+  }
 });
