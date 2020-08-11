@@ -5,7 +5,7 @@ import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
 import { ListItem, Input, Button } from "react-native-elements";
 import { TodoReducer, INIT_TODO } from "./src/reducers/TodoReducer";
-import { addTodo } from "./src/actions/TodoActions";
+import { addTodo, toggleTodo } from "./src/actions/TodoActions";
 
 export default function App() {
   const [value, onChangeText] = useState("");
@@ -32,12 +32,12 @@ export default function App() {
         {taskList.map((item, i) => (
           <ListItem
             containerStyle={styles.listItemStyle}
-            key={i}
+            // key={i}
             // title property doesn't work
             leftElement={<Text>{item.name}</Text>}
             checkBox={{
               checked: item.isDone,
-              onPress: () => toggleTaskStatus(i),
+              onPress: () => dispatch(toggleTodo(item)),
             }}
           />
         ))}
