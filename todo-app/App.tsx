@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
-import { CheckBox, ListItem, Input, Button } from "react-native-elements";
+import { ListItem, Input, Button } from "react-native-elements";
 
 export default function App() {
   const [value, onChangeText] = useState("");
@@ -38,12 +38,12 @@ export default function App() {
           <ListItem
             containerStyle={styles.listItemStyle}
             key={i}
-            title={item.name}
+             // title doesn't work
+            leftElement={<Text>{item.name}</Text>}
             checkBox={{
               checked: item.isDone,
               onPress: () => toggleTaskStatus(i),
             }}
-            bottomDivider
           />
         ))}
       </View>
