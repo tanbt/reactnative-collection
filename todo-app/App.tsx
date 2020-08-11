@@ -5,15 +5,14 @@ import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
 import { CheckBox, ListItem, Input, Button } from "react-native-elements";
 
-var taskList = [
-  {
-    name: "My initial task",
-    isDone: true,
-  },
-];
-
 export default function App() {
   const [value, onChangeText] = useState("");
+  const [taskList, onAddItem] = useState([
+    {
+      name: "My initial task",
+      isDone: true,
+    },
+  ]);
 
   return (
     <View style={styles.container}>
@@ -27,12 +26,13 @@ export default function App() {
         />
         <Button
           icon={<Icon name="add-to-list" size={24} color="black" />}
-          onPress={() => addTask(value)}
+          onPress={() =>
+            onAddItem(taskList.concat([{ name: value, isDone: false }]))
+          }
           type="clear"
         />
       </View>
 
-      <Text>{value != "" ? "You entered: " + value : ""}</Text>
       <View>
         {taskList.map((item, i) => (
           <ListItem
@@ -51,15 +51,11 @@ export default function App() {
       <StatusBar style="auto" />
     </View>
   );
+
+  function toggleTaskStatus(index: number) {
+    taskList[index].isDone = !taskList[index].isDone;
+  }
 }
-
-const addTask = (value: string) => {
-  taskList = taskList.concat({ name: value, isDone: false });
-};
-
-const toggleTaskStatus = (index: number) => {
-  taskList[index].isDone = !taskList[index].isDone;
-};
 
 const styles = StyleSheet.create({
   container: {
