@@ -1,26 +1,51 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useReducer } from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  FlatList,
+  SafeAreaView,
+  CheckBox,
+} from "react-native";
 import { Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
-import { ListItem, Button } from "react-native-elements";
+import { Button } from "react-native-elements";
 import { TodoReducer, INIT_TODO } from "./src/reducers/TodoReducer";
-import { addTodo, toggleTodo } from "./src/actions/TodoActions";
+import { TodoItem, addTodo, toggleTodo } from "./src/actions/TodoActions";
 
 export default function App() {
   const [value, onChangeText] = useState("");
   const [taskList, dispatch] = useReducer(TodoReducer, INIT_TODO);
   const { container, listItemStyle, header } = styles;
 
+  const renderItem = (
+    { item }: { item: TodoItem } // what the syntax!
+  ) => (
+    <View>
+      <Text>{item.name}</Text>
+      <CheckBox
+        value={item.isDone}
+        onValueChange={() => dispatch(toggleTodo(item))}
+      />
+    </View>
+  );
+
   return (
-    <View style={container}>
+    <SafeAreaView style={container}>
       <View style={header}>
         <Text h3>Your Todos</Text>
       </View>
 
       <View style={{ padding: 5, flexDirection: "row" }}>
         <TextInput
-          style={{ flexGrow: 1, borderColor: "#CCC", borderWidth: 1, padding: 5, borderRadius: 3 }}
+          style={{
+            flexGrow: 1,
+            borderColor: "#CCC",
+            borderWidth: 1,
+            padding: 5,
+            borderRadius: 3,
+          }}
           placeholder="Enter a task"
           onChangeText={(val) => onChangeText(val)}
         />
@@ -31,23 +56,14 @@ export default function App() {
         />
       </View>
 
-      <View>
-        {taskList.map((item, i) => (
-          <ListItem
-            containerStyle={listItemStyle}
-            key={i} // this prop is required
-            // title prop doesn't work
-            leftElement={<Text>{item.name}</Text>}
-            checkBox={{
-              checked: item.isDone,
-              onPress: () => dispatch(toggleTodo(item)),
-            }}
-          />
-        ))}
-      </View>
+      <FlatList
+        data={taskList}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
 
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
