@@ -6,9 +6,8 @@ import {
   TextInput,
   FlatList,
   SafeAreaView,
-  CheckBox,
 } from "react-native";
-import { Text } from "react-native-elements";
+import { CheckBox, Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/Entypo";
 import { Button } from "react-native-elements";
 import { TodoReducer, INIT_TODO } from "./src/reducers/TodoReducer";
@@ -25,8 +24,8 @@ export default function App() {
     <View>
       <Text>{item.name}</Text>
       <CheckBox
-        value={item.isDone}
-        onValueChange={() => dispatch(toggleTodo(item))}
+        checked={item.isDone}
+        onPress={() => dispatch(toggleTodo(item))}
       />
     </View>
   );
