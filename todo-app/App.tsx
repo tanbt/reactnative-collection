@@ -16,12 +16,18 @@ import { TodoItem, addTodo, toggleTodo } from "./src/actions/TodoActions";
 export default function App() {
   const [value, onChangeText] = useState("");
   const [taskList, dispatch] = useReducer(TodoReducer, INIT_TODO);
-  const { container, listItemStyle, header } = styles;
+  const { container, listWrapper, itemWrapper, header } = styles;
 
   const renderItem = (
     { item }: { item: TodoItem } // what the syntax!
   ) => (
-    <View>
+    <View
+      style={
+        item.id % 2 == 0
+          ? itemWrapper
+          : [itemWrapper, { backgroundColor: "#FFF" }]
+      }
+    >
       <Text>{item.name}</Text>
       <CheckBox
         checked={item.isDone}
@@ -55,11 +61,13 @@ export default function App() {
         />
       </View>
 
-      <FlatList
-        data={taskList}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
+      <SafeAreaView style={listWrapper}>
+        <FlatList
+          data={taskList}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </SafeAreaView>
 
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -83,8 +91,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
   },
-  listItemStyle: {
-    // reuse = better performance
-    alignSelf: "auto",
+  listWrapper: {
+    alignSelf: "stretch",
+  },
+  itemWrapper: {
+    backgroundColor: "#EEE",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
