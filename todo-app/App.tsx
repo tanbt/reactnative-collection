@@ -12,11 +12,12 @@ import Icon from "react-native-vector-icons/Entypo";
 import { Button } from "react-native-elements";
 import { TodoReducer, INIT_TODO } from "./src/reducers/TodoReducer";
 import { TodoItem, addTodo, toggleTodo } from "./src/actions/TodoActions";
+import Header from "./src/navigation/Header";
 
 export default function App() {
   const [value, onChangeText] = useState("");
   const [taskList, dispatch] = useReducer(TodoReducer, INIT_TODO);
-  const { container, listWrapper, itemWrapper, header } = styles;
+  const { container, listWrapper, itemWrapper } = styles;
 
   const renderItem = (
     { item }: { item: TodoItem } // what the syntax!
@@ -38,9 +39,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={container}>
-      <View style={header}>
-        <Text h3>Your Todos</Text>
-      </View>
+      <Header h3 title="Your todos" />
 
       <View style={{ padding: 5, flexDirection: "row" }}>
         <TextInput
@@ -79,17 +78,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-  },
-  header: {
-    height: 70,
-    backgroundColor: "#CCC",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    alignSelf: "stretch",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
   },
   listWrapper: {
     alignSelf: "stretch",

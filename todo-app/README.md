@@ -7,6 +7,7 @@
 ## Plans
 * Build the most basic Todo App using core components
 * Replace core components by more-beautiful components
+* Split Header component with dynamic property
 * Use Redux to manage states
 https://www.valentinog.com/blog/hooks/
 https://medium.com/@unionproject88/react-native-todo-app-with-redux-1a612266151b
