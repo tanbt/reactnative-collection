@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, SafeAreaView } from "react-native";
-import {} from "react-native-elements";
+import { StyleSheet, SafeAreaView, Button } from "react-native";
 import Header from "./src/navigation/Header";
 import TodoScreen from "./screens/TodoScreen";
 
@@ -10,10 +9,12 @@ export default function App() {
 
   return (
     <SafeAreaView style={container}>
+      {/* todo change title based on screen */}
       <Header h3 title="Your todos" />
 
       <TodoScreen />
 
+      <Button title="Go to Data Screen" onPress={() => {console.log("pressed")}} />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
