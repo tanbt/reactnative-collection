@@ -7,10 +7,7 @@ import Header from "./src/navigation/Header";
 import TodoScreen from "./screens/TodoScreen";
 import DataScreen from "./screens/DataScreen";
 import { StackScreenProps } from "@react-navigation/stack/lib/typescript/src/types";
-
-type DataScreenParamList = {
-  Data: { hello: string };
-};
+import { DataScreenParamList } from "./types";
 
 const Stack = createStackNavigator();
 

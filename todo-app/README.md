@@ -3,12 +3,15 @@
 ## Run
 * npm ci
 * npm run web
+Can be access by a smartphone with Expo Client app when using the same internet connection.
 
 ## Plans
 * Build the most basic Todo App using core components
 * Replace core components by more-beautiful components
 * Split Header component with dynamic property
-* Add a second tab (screen) using react-navigation, reuse Header with dynamic content
+* Add a second tab (screen) using react-navigation, add icon (e.g. avatar) to react-navigation header
+    * Create bottom tab navigation (following starter project)
+    * Create header button https://reactnavigation.org/docs/header-buttons
 * Use Redux to manage states
 https://www.valentinog.com/blog/hooks/
 https://medium.com/@unionproject88/react-native-todo-app-with-redux-1a612266151b
