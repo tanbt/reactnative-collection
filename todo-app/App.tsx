@@ -6,18 +6,18 @@ import { StyleSheet, SafeAreaView, Button } from "react-native";
 import Header from "./src/navigation/Header";
 import TodoScreen from "./screens/TodoScreen";
 import DataScreen from "./screens/DataScreen";
-import {
-  StackNavigationHelpers,
-  StackScreenProps,
-} from "@react-navigation/stack/lib/typescript/src/types";
+import { StackScreenProps } from "@react-navigation/stack/lib/typescript/src/types";
+
+type DataScreenParamList = {
+  Data: { hello: string };
+};
 
 const Stack = createStackNavigator();
 
-function HomeScreen({ navigation }: StackScreenProps<{ Data: undefined }>) {
+function HomeScreen({ navigation }: StackScreenProps<DataScreenParamList>) {
   const { container } = styles;
   return (
     <SafeAreaView style={container}>
-      {/* todo change title based on screen */}
       <Header h3 title="Your todos" />
 
       <TodoScreen />
@@ -25,7 +25,9 @@ function HomeScreen({ navigation }: StackScreenProps<{ Data: undefined }>) {
       <Button
         title="Go to Data Screen"
         onPress={() => {
-          navigation.navigate("Data");
+          navigation.navigate("Data", {
+            hello: "Hello from a param!",
+          });
         }}
       />
       <StatusBar style="auto" />

@@ -25,6 +25,7 @@
     "description": "",
     "android": {
       "package": "app.todo"
-    }
+    },
+    "sdkVersion": "38.0.0"
   }
 }

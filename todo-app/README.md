@@ -17,6 +17,8 @@ https://dev.to/shivabhusal/step-to-step-guide-to-build-a-todo-app-with-react-and
 * Send data to firebase storage or google cloud
 * Authentication ?
 * Lazy-loading list
+* [Unit test with TS](https://medium.com/software-research/setting-up-react-native-with-expo-typescript-jest-and-visual-studio-code-f05cda9763a3)
 
 ## Docs
 * https://reactjs.org/docs/hooks-intro.html
+* https://reactnavigation.org/docs/tab-based-navigation
