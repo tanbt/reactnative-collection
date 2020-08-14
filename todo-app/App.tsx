@@ -6,11 +6,14 @@ import { StyleSheet, SafeAreaView, Button } from "react-native";
 import Header from "./src/navigation/Header";
 import TodoScreen from "./screens/TodoScreen";
 import DataScreen from "./screens/DataScreen";
-import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
+import {
+  StackNavigationHelpers,
+  StackScreenProps,
+} from "@react-navigation/stack/lib/typescript/src/types";
 
 const Stack = createStackNavigator();
 
-function HomeScreen({ navigation }: {navigation: StackNavigationHelpers}) {
+function HomeScreen({ navigation }: StackScreenProps<{ Data: undefined }>) {
   const { container } = styles;
   return (
     <SafeAreaView style={container}>
