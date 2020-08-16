@@ -22,10 +22,14 @@ export default function App() {
   let recording = new Audio.Recording();
   let currentRecordingStatus;
   async function _startRecording() {
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      allowsRecordingIOS: true,
+    }); // <= setting for IOS
     await recording.prepareToRecordAsync(
       Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY
     );
-
+    console.log("done preparing...");
     await recording.startAsync();
     setRecordingStatus(await recording.getStatusAsync());
 
