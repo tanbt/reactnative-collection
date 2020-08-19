@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
-import { RecordingStatus } from "expo-av/build/Audio";
 
 export default function App() {
   const [isAllowRecord, setAllowRecord] = useState("No");
-  const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>();
+  const [recordingStatus, setRecordingStatus] = useState<Audio.RecordingStatus>();
 
   // similar to componentDidMount and componentDidUpdate
   useEffect(() => {
@@ -33,7 +32,7 @@ export default function App() {
     await recording.startAsync();
     setRecordingStatus(await recording.getStatusAsync());
 
-    recording.setOnRecordingStatusUpdate((status: RecordingStatus) =>
+    recording.setOnRecordingStatusUpdate((status: Audio.RecordingStatus) =>
       setRecordingStatus(status)
     );
   }
