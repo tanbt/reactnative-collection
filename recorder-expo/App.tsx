@@ -6,10 +6,12 @@ import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
 
 export default function App() {
-  const [recording, setRecording] = useState<Audio.Recording>();
-  const [sound, setSound] = useState<Audio.Sound>();
+  const [recording, setRecording] = useState<Audio.Recording | null>();
+  const [sound, setSound] = useState<Audio.Sound | null>();
   const [isAllowRecord, setAllowRecord] = useState("No");
-  const [recordingStatus, setRecordingStatus] = useState<Audio.RecordingStatus>();
+  const [recordingStatus, setRecordingStatus] = useState<
+    Audio.RecordingStatus
+  >();
 
   // similar to componentDidMount and componentDidUpdate
   useEffect(() => {
@@ -22,6 +24,9 @@ export default function App() {
   }
 
   async function _startRecording() {
+    if (sound) {
+      setSound(null);
+    }
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -48,7 +53,7 @@ export default function App() {
 
   async function _stopRecording() {
     if (!recording) {
-      console.log("You are not recording.")
+      console.log("You are not recording.");
       return;
     }
 
@@ -86,9 +91,19 @@ export default function App() {
     <View style={styles.container}>
       <Text>Open up App.tsx to start working on your app!</Text>
 
-      <Button title="start record" onPress={_startRecording} />
-      <Button title="stop record" onPress={_stopRecording} />
-      <Button title="play recorded" onPress={_playRecorded} />
+      <View style={styles.marginBottom10}>
+        <Button title="start record" onPress={_startRecording} />
+      </View>
+      <View style={styles.marginBottom10}>
+        <Button title="stop record" onPress={_stopRecording} />
+      </View>
+      <View style={styles.marginBottom10}>
+        <Button
+          disabled={!sound}
+          title="play recorded"
+          onPress={_playRecorded}
+        />
+      </View>
 
       <View>
         <Text>Recording permission: {isAllowRecord} </Text>
@@ -115,6 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   marginBottom10: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
