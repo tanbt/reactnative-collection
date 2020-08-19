@@ -5,6 +5,7 @@ import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
 
 export default function App() {
+  const [recording, setRecording] = useState<Audio.Recording>();
   const [isAllowRecord, setAllowRecord] = useState("No");
   const [recordingStatus, setRecordingStatus] = useState<Audio.RecordingStatus>();
 
@@ -18,34 +19,37 @@ export default function App() {
     setAllowRecord(response.status);
   }
 
-  let recording = new Audio.Recording();
   let currentRecordingStatus;
   async function _startRecording() {
     await Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
       allowsRecordingIOS: true,
     }); // <= setting for IOS
-    await recording.prepareToRecordAsync(
+
+    const newRrecording = new Audio.Recording();
+    setRecording(newRrecording);
+
+    await newRrecording.prepareToRecordAsync(
       Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY
     );
-    console.log("done preparing...");
-    await recording.startAsync();
-    setRecordingStatus(await recording.getStatusAsync());
 
-    recording.setOnRecordingStatusUpdate((status: Audio.RecordingStatus) =>
+    newRrecording.setOnRecordingStatusUpdate((status: Audio.RecordingStatus) =>
       setRecordingStatus(status)
     );
+
+    await newRrecording.startAsync();
   }
 
-  // bug: https://github.com/expo/expo/issues/1709
   async function _stopRecording() {
+    if (!recording) {
+      console.log("You are not recording.")
+      return;
+    }
+
     try {
-      console.log("stopping 1...");
       currentRecordingStatus = await recording.stopAndUnloadAsync();
       setRecordingStatus(currentRecordingStatus);
-
       console.log(`Recorded URI: ${recording.getURI()}`);
-      //const info = await FileSystem.getInfoAsync(this.recording.getURI());
     } catch (error) {
       // Do nothing -- we are already unloaded.
     }
