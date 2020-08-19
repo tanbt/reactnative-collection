@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
 
 export default function App() {
@@ -20,7 +21,6 @@ export default function App() {
     setAllowRecord(response.status);
   }
 
-  let currentRecordingStatus;
   async function _startRecording() {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -36,7 +36,7 @@ export default function App() {
     setRecording(newRrecording);
 
     await newRrecording.prepareToRecordAsync(
-      Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY
+      Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
     );
 
     newRrecording.setOnRecordingStatusUpdate((status: Audio.RecordingStatus) =>
@@ -57,6 +57,29 @@ export default function App() {
     } catch (error) {
       // Do nothing -- we are already unloaded.
     }
+
+    const info = await FileSystem.getInfoAsync(recording.getURI() || "");
+    console.log(`FILE INFO: ${JSON.stringify(info)}`);
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    });
+    const { sound, status } = await recording.createNewLoadedSoundAsync();
+    setSound(sound);
+  }
+
+  function _playRecorded() {
+    if (!sound) {
+      console.log("You don't have a record.");
+      return;
+    }
+
+    sound.playAsync();
   }
 
   return (
@@ -65,6 +88,7 @@ export default function App() {
 
       <Button title="start record" onPress={_startRecording} />
       <Button title="stop record" onPress={_stopRecording} />
+      <Button title="play recorded" onPress={_playRecorded} />
 
       <View>
         <Text>Recording permission: {isAllowRecord} </Text>
@@ -90,4 +114,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  marginBottom10: {
+    marginBottom: 10
+  }
 });
