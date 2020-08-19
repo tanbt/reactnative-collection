@@ -6,6 +6,7 @@ import * as Permissions from "expo-permissions";
 
 export default function App() {
   const [recording, setRecording] = useState<Audio.Recording>();
+  const [sound, setSound] = useState<Audio.Sound>();
   const [isAllowRecord, setAllowRecord] = useState("No");
   const [recordingStatus, setRecordingStatus] = useState<Audio.RecordingStatus>();
 
@@ -22,9 +23,14 @@ export default function App() {
   let currentRecordingStatus;
   async function _startRecording() {
     await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
       playsInSilentModeIOS: true,
-      allowsRecordingIOS: true,
-    }); // <= setting for IOS
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    }); // <= important for IOS
 
     const newRrecording = new Audio.Recording();
     setRecording(newRrecording);
@@ -47,9 +53,7 @@ export default function App() {
     }
 
     try {
-      currentRecordingStatus = await recording.stopAndUnloadAsync();
-      setRecordingStatus(currentRecordingStatus);
-      console.log(`Recorded URI: ${recording.getURI()}`);
+      await recording.stopAndUnloadAsync();
     } catch (error) {
       // Do nothing -- we are already unloaded.
     }
