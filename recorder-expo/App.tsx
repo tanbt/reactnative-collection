@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
+import * as Device from "expo-device";
 
 export default function App() {
   const [recording, setRecording] = useState<Audio.Recording | null>();
@@ -129,20 +130,18 @@ export default function App() {
       },
       body: JSON.stringify({
         config: {
-          encoding: "AMR_WB",
-          // encoding: "LINEAR16", // for IOS
+          encoding: Device.osName == "iOS" ? "LINEAR16" : "AMR_WB",
           sampleRateHertz: 16000,
-          languageCode: "en-US"
+          languageCode: "en-US",
         },
         audio: {
-          content: audioString
+          content: audioString,
         },
       }),
     });
 
     const json = await response.json();
     try {
-      console.log(json.results[0].alternatives[0].transcript);
       setTranscript(json.results[0].alternatives[0].transcript);
     } catch (error) {
       console.log(json);
@@ -165,7 +164,12 @@ export default function App() {
           onPress={_playRecorded}
         />
       </View>
-      <Text>Is recording: {recordingStatus?.isRecording ? "Yes (" + recordingStatus?.durationMillis + ")" : "No"}</Text>
+      <Text>
+        Is recording:{" "}
+        {recordingStatus?.isRecording
+          ? "Yes (" + recordingStatus?.durationMillis + ")"
+          : "No"}
+      </Text>
 
       {/* <View>
         <Text>Recording permission: {isAllowRecord} </Text>
