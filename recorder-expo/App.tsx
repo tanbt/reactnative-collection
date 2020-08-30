@@ -13,6 +13,10 @@ export default function App() {
     Audio.RecordingStatus
   >();
 
+  const [transcript, setTranscript] = useState(
+    "(Finish a recording to see its transcript...)"
+  );
+
   // similar to componentDidMount and componentDidUpdate
   useEffect(() => {
     _askForPermissions();
@@ -40,9 +44,29 @@ export default function App() {
     const newRrecording = new Audio.Recording();
     setRecording(newRrecording);
 
-    await newRrecording.prepareToRecordAsync(
-      Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
-    );
+    const recordingOptions = {
+      // android not currently in use, but parameters are required
+      android: {
+        extension: ".m4a",
+        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_AMR_WB,
+        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AMR_WB,
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        bitRate: 64000,
+      },
+      ios: {
+        extension: ".wav",
+        // outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_AMR_WB,
+        audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MEDIUM,
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        bitRate: 64000,
+        linearPCMBitDepth: 16,
+        linearPCMIsBigEndian: false,
+        linearPCMIsFloat: false,
+      },
+    };
+    await newRrecording.prepareToRecordAsync(recordingOptions);
 
     newRrecording.setOnRecordingStatusUpdate((status: Audio.RecordingStatus) =>
       setRecordingStatus(status)
@@ -56,15 +80,12 @@ export default function App() {
       console.log("You are not recording.");
       return;
     }
-
     try {
       await recording.stopAndUnloadAsync();
     } catch (error) {
       // Do nothing -- we are already unloaded.
     }
 
-    const info = await FileSystem.getInfoAsync(recording.getURI() || "");
-    console.log(`FILE INFO: ${JSON.stringify(info)}`);
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -76,6 +97,8 @@ export default function App() {
     });
     const { sound, status } = await recording.createNewLoadedSoundAsync();
     setSound(sound);
+
+    await getTranscript(recording);
   }
 
   function _playRecorded() {
@@ -83,14 +106,52 @@ export default function App() {
       console.log("You don't have a record.");
       return;
     }
-
     sound.playAsync();
+  }
+
+  async function getTranscript(recording: Audio.Recording) {
+    const restAPI =
+      "https://speech.googleapis.com/v1/speech:recognize?key=AIzaSyAqfRQcqG0nJF90EGUziIQq4IAHfcmlKkE";
+    const info = await FileSystem.getInfoAsync(recording.getURI() || "");
+    console.log(`FILE INFO: ${JSON.stringify(info)}`);
+    const audioString = await FileSystem.readAsStringAsync(
+      recording.getURI() || "",
+      {
+        encoding: FileSystem.EncodingType.Base64,
+      }
+    );
+    const response = await fetch(restAPI, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        // 'Authorization': 'Bearer <token>'
+      },
+      body: JSON.stringify({
+        config: {
+          encoding: "AMR_WB",
+          // encoding: "LINEAR16", // for IOS
+          sampleRateHertz: 16000,
+          languageCode: "en-US"
+        },
+        audio: {
+          content: audioString
+        },
+      }),
+    });
+
+    const json = await response.json();
+    try {
+      console.log(json.results[0].alternatives[0].transcript);
+      setTranscript(json.results[0].alternatives[0].transcript);
+    } catch (error) {
+      console.log(json);
+      setTranscript("Failed to listen. Please try again...");
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-
       <View style={styles.marginBottom10}>
         <Button title="start record" onPress={_startRecording} />
       </View>
@@ -104,17 +165,21 @@ export default function App() {
           onPress={_playRecorded}
         />
       </View>
+      <Text>Is recording: {recordingStatus?.isRecording ? "Yes (" + recordingStatus?.durationMillis + ")" : "No"}</Text>
 
-      <View>
+      {/* <View>
         <Text>Recording permission: {isAllowRecord} </Text>
         <Text style={{ fontSize: 15 }}>
           Can record: {recordingStatus?.canRecord ? "Yes" : "No"}
         </Text>
-        <Text>Is recording: {recordingStatus?.isRecording ? "Yes" : "No"}</Text>
         <Text>
           Is done recording: {recordingStatus?.isDoneRecording ? "Yes" : "No"}
         </Text>
         <Text>Recording time: {recordingStatus?.durationMillis}</Text>
+      </View> */}
+
+      <View>
+        <Text>{transcript}</Text>
       </View>
 
       <StatusBar style="auto" />
