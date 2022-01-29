@@ -22,7 +22,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "",
+    "description": "Upgrade deps Jan 2022",
     "android": {
       "package": "app.todo"
     },
