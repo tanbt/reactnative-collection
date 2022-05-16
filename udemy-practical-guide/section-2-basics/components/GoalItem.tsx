@@ -1,12 +1,23 @@
-import { StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 export interface GoalItem {
-  id?: string;
+  id: string;
   text: string;
 }
 
-export function GoalItem(props: GoalItem) {
-  return <Text style={styles.goalItem}>{props.text}</Text>;
+interface GoalItemProps {
+  item: GoalItem;
+  onItemPress: (id: string) => void;
+}
+
+export function GoalItem(props: GoalItemProps) {
+  const { id, text } = props.item;
+
+  return (
+    <Pressable onPress={() => props.onItemPress(id)}>
+      <Text style={styles.goalItem}>{text}</Text>
+    </Pressable>
+  );
 }
 
 const styles = StyleSheet.create({
