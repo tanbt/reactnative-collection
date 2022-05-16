@@ -26,13 +26,13 @@ export function GoalItem(props: GoalItemProps) {
 
 const styles = StyleSheet.create({
   goalItem: {
-    padding: 10,
+    padding: 5,
     margin: 5,
     backgroundColor: "#AAF",
     borderRadius: 3,
   },
   pressedItem: {
-    padding: 10,
+    padding: 5,
     margin: 5,
     backgroundColor: "#DDD",
     borderRadius: 3,
