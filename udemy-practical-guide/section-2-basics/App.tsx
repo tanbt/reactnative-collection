@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { Button, FlatList, StyleSheet, View } from "react-native";
 import { GoalInput } from "./components/GoalInput";
@@ -34,6 +35,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <Button title="Add Goal" onPress={toggleAddGoalModal} />
       <GoalInput
         visible={addGoalVisible}
