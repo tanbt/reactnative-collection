@@ -3,8 +3,14 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { GoalInput } from "./components/GoalInput";
 import { GoalItem } from "./components/GoalItem";
 
+const sampleData = [
+  { id: "1", text: "Goal 1" },
+  { id: "2", text: "Goal 2" },
+  { id: "3", text: "Goal 3" },
+];
+
 export default function App() {
-  const [goals, setGoals] = useState<GoalItem[]>([]);
+  const [goals, setGoals] = useState<GoalItem[]>(sampleData);
 
   function handleAddGoal(goalInput: string) {
     setGoals([
@@ -40,7 +46,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 5,
-    paddingTop: 20,
+    marginTop: 40,
     flexDirection: "column",
   },
   goalsContainer: {
