@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { GameScreen } from "./screens/GameScreen";
 import { StartGameScreen } from "./screens/StartGameScreen";
+import { Colors } from "./util/constants";
 
 const bgImg: ImageRequireSource = require("./assets/background.png");
 
@@ -21,7 +22,7 @@ export default function App() {
   );
 
   return (
-    <LinearGradient colors={["#4e0329", "#ddb52f"]} style={s.root}>
+    <LinearGradient colors={["#4e0329", Colors.accent500]} style={s.root}>
       {/* @ts-ignore */}
       <ImageBackground
         source={bgImg}
