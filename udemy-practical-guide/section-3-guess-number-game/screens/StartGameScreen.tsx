@@ -55,7 +55,7 @@ export function StartGameScreen({ onEnterNumber }: StartGameScreenProps) {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginTop: 50,
+    marginTop: 30,
     marginHorizontal: 24,
     padding: 16,
     backgroundColor: "#42063c",
