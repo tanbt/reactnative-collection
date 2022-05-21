@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
+import { GameOver } from "./screens/GameOver";
 import { GameScreen } from "./screens/GameScreen";
 import { StartGameScreen } from "./screens/StartGameScreen";
 import { Colors } from "./util/constants";
@@ -14,12 +15,23 @@ const bgImg: ImageRequireSource = require("./assets/background.png");
 
 export default function App() {
   const [userNumber, setUserNumber] = useState<string>();
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-  const currentScreen = userNumber ? (
-    <GameScreen userNumber={parseInt(userNumber)} />
+  function gameOverHandler() {
+    setIsGameOver(true);
+  }
+
+  let currentScreen = userNumber ? (
+    <GameScreen
+      userNumber={parseInt(userNumber)}
+      onGameOver={gameOverHandler}
+    />
   ) : (
     <StartGameScreen onEnterNumber={setUserNumber} />
   );
+  if (isGameOver) {
+    currentScreen = <GameOver />;
+  }
 
   return (
     <LinearGradient colors={["#4e0329", Colors.accent500]} style={s.root}>
