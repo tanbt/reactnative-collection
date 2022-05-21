@@ -16,7 +16,7 @@ export default function App() {
   const [userNumber, setUserNumber] = useState<string>();
 
   const currentScreen = userNumber ? (
-    <GameScreen />
+    <GameScreen userNumber={parseInt(userNumber)} />
   ) : (
     <StartGameScreen onEnterNumber={setUserNumber} />
   );
