@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
+import { Card } from "../components/Card";
+import { InstructionText } from "../components/InstructionText";
 import { NumberContainer } from "../components/NumberContainer";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { Title } from "../components/Title";
-import { GameOver } from "./GameOver";
 
 enum Direction {
   LOWER,
@@ -76,29 +77,31 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
   }
 
   return (
-    <View style={s.screen}>
+    <View style={s.rootContainer}>
       <Title>Opponent's Guess</Title>
-      <NumberContainer>{currentGuess}</NumberContainer>
-      <View>
-        <Text>Higher or lower?</Text>
+      <Card>
+        <NumberContainer>{currentGuess}</NumberContainer>
         <View>
-          <PrimaryButton onPress={() => nextGuessHandler(Direction.HIGHER)}>
-            +
-          </PrimaryButton>
-          <PrimaryButton onPress={() => nextGuessHandler(Direction.LOWER)}>
-            -
-          </PrimaryButton>
-          <PrimaryButton onPress={showHint}>Hint</PrimaryButton>
+          <InstructionText>Higher or lower?</InstructionText>
+          <View>
+            <PrimaryButton onPress={() => nextGuessHandler(Direction.HIGHER)}>
+              +
+            </PrimaryButton>
+            <PrimaryButton onPress={() => nextGuessHandler(Direction.LOWER)}>
+              -
+            </PrimaryButton>
+            <PrimaryButton onPress={showHint}>Hint</PrimaryButton>
+          </View>
         </View>
-      </View>
+      </Card>
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  screen: {
-    flex: 1,
-    padding: 12,
-    marginTop: 30,
+  rootContainer: {
+    flext: 1,
+    marginTop: 100,
+    marginHorizontal: 24,
   },
 });
