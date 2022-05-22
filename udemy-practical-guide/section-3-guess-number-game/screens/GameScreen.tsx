@@ -90,10 +90,10 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
           </InstructionText>
           <View style={s.buttonContainer}>
             <PrimaryButton onPress={() => nextGuessHandler(Direction.HIGHER)}>
-              {<Ionicons name="md-remove" size={24} />}
+              <Ionicons name="md-add" size={24} />
             </PrimaryButton>
             <PrimaryButton onPress={() => nextGuessHandler(Direction.LOWER)}>
-              <Ionicons name="md-add" size={24} />
+              {<Ionicons name="md-remove" size={24} />}
             </PrimaryButton>
           </View>
           <View style={s.buttonContainer}>
