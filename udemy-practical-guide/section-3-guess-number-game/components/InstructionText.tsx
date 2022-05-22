@@ -13,6 +13,7 @@ export function InstructionText({
 
 const s = StyleSheet.create({
   instructionText: {
+    fontFamily: "open-sans",
     color: Colors.accent500,
     fontSize: 24,
     textAlign: "center",

@@ -5,6 +5,7 @@ import { InstructionText } from "../components/InstructionText";
 import { NumberContainer } from "../components/NumberContainer";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { Title } from "../components/Title";
+import { Ionicons } from "@expo/vector-icons";
 
 enum Direction {
   LOWER,
@@ -76,9 +77,7 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
     ]);
   }
 
-  function resetGame() {
-
-  }
+  function resetGame() {}
 
   return (
     <View style={s.rootContainer}>
@@ -91,10 +90,10 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
           </InstructionText>
           <View style={s.buttonContainer}>
             <PrimaryButton onPress={() => nextGuessHandler(Direction.HIGHER)}>
-              +
+              {<Ionicons name="md-remove" size={24} />}
             </PrimaryButton>
             <PrimaryButton onPress={() => nextGuessHandler(Direction.LOWER)}>
-              -
+              <Ionicons name="md-add" size={24} />
             </PrimaryButton>
           </View>
           <View style={s.buttonContainer}>
