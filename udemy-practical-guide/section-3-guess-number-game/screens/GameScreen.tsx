@@ -23,16 +23,16 @@ function generateRandomBetween(
   max: number,
   exclude: number
 ): number {
-  const rndNum = Math.floor(Math.random() * (max - min)) + min;
-  if (rndNum === exclude) {
-    return generateRandomBetween(min, max, exclude);
-  } else {
-    return rndNum;
+  let rndNum = -1;
+  while (rndNum < min || rndNum > max || rndNum === exclude) {
+    if (min === max) return min;
+    rndNum = Math.floor(Math.random() * 100);
   }
+  return rndNum;
 }
 
 let minBoundary = 1;
-let maxBoundary = 100;
+let maxBoundary = 99;
 
 export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
   const [currentGuess, setCurrentGuess] = useState<number>(() =>
@@ -42,7 +42,7 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
 
   useEffect(() => {
     minBoundary = 1;
-    maxBoundary: 100;
+    maxBoundary: 99;
   }, []);
   useEffect(() => {
     if (currentGuess === userNumber) {

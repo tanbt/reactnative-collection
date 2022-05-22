@@ -15,8 +15,8 @@ export function GameOver({ userNumber, roundNumber }: GameOverProps) {
         <Image style={s.image} source={require("../assets/success.png")} />
       </View>
       <Text style={s.summaryText}>
-        Your phone need <Text style={s.hightlight}>{userNumber}</Text> step to
-        found your number <Text style={s.hightlight}>{roundNumber}</Text>.
+        Your phone need <Text style={s.hightlight}>{roundNumber}</Text> step to
+        found your number <Text style={s.hightlight}>{userNumber}</Text>.
       </Text>
     </View>
   );
