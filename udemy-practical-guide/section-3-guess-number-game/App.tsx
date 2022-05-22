@@ -1,5 +1,3 @@
-import AppLoading from "expo-app-loading";
-import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import {
@@ -14,19 +12,23 @@ import { GameOver } from "./screens/GameOver";
 import { GameScreen } from "./screens/GameScreen";
 import { StartGameScreen } from "./screens/StartGameScreen";
 import { Colors } from "./util/constants";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
 
 const bgImg: ImageRequireSource = require("./assets/background.png");
 
 export default function App() {
+  SplashScreen.preventAutoHideAsync();
   const [userNumber, setUserNumber] = useState<string>();
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-  const [fontsLoaded] = useFonts({
+  let [fontsLoaded] = useFonts({
     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
   });
-  if (!fontsLoaded) {
-    return <AppLoading />;
+
+  if (fontsLoaded) {
+    SplashScreen.hideAsync();
   }
 
   function gameOverHandler() {
