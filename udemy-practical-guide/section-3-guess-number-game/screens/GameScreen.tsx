@@ -15,6 +15,7 @@ enum Direction {
 interface GameScreenProps {
   userNumber: number;
   onGameOver: Function;
+  setGuessRounds: Function;
 }
 
 function generateRandomBetween(
@@ -33,11 +34,19 @@ function generateRandomBetween(
 let minBoundary = 1;
 let maxBoundary = 100;
 
-export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
+export function GameScreen({
+  userNumber,
+  onGameOver,
+  setGuessRounds,
+}: GameScreenProps) {
   const [currentGuess, setCurrentGuess] = useState<number>(() =>
-    generateRandomBetween(1, 100, userNumber)
+    generateRandomBetween(minBoundary, maxBoundary, userNumber)
   );
 
+  useEffect(() => {
+    minBoundary = 1;
+    maxBoundary: 100;
+  }, []);
   useEffect(() => {
     if (currentGuess === userNumber) {
       onGameOver();
@@ -69,6 +78,7 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
       currentGuess
     );
     setCurrentGuess(newRndNumber);
+    setGuessRounds(1);
   }
 
   function showHint() {

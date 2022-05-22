@@ -22,6 +22,8 @@ export default function App() {
   const [userNumber, setUserNumber] = useState<string>();
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
+  const [guessRounds, setGuessRounds] = useState<number>(0);
+
   let [fontsLoaded] = useFonts({
     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
@@ -37,8 +39,9 @@ export default function App() {
     setIsGameOver(true);
   }
 
-  function resetGame() {
+  function restartGame() {
     setUserNumber("");
+    setGuessRounds(0);
     setIsGameOver(false);
   }
 
@@ -46,12 +49,17 @@ export default function App() {
     <GameScreen
       userNumber={parseInt(userNumber)}
       onGameOver={gameOverHandler}
+      setGuessRounds={(inc: number) =>
+        setGuessRounds((prevValue: number) => prevValue + inc)
+      }
     />
   ) : (
     <StartGameScreen onEnterNumber={setUserNumber} />
   );
   if (isGameOver) {
-    currentScreen = <GameOver />;
+    currentScreen = (
+      <GameOver userNumber={userNumber} roundNumber={guessRounds} />
+    );
   }
 
   return (
@@ -66,7 +74,7 @@ export default function App() {
         <SafeAreaView style={s.root}>
           {currentScreen}
           <View style={s.contextBtn}>
-            <PrimaryButton onPress={resetGame}>Reset Game</PrimaryButton>
+            <PrimaryButton onPress={restartGame}>Restart Game</PrimaryButton>
           </View>
         </SafeAreaView>
       </ImageBackground>
