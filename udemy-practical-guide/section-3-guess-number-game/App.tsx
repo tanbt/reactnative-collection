@@ -5,7 +5,9 @@ import {
   ImageRequireSource,
   SafeAreaView,
   StyleSheet,
+  View,
 } from "react-native";
+import { PrimaryButton } from "./components/PrimaryButton";
 import { GameOver } from "./screens/GameOver";
 import { GameScreen } from "./screens/GameScreen";
 import { StartGameScreen } from "./screens/StartGameScreen";
@@ -19,6 +21,11 @@ export default function App() {
 
   function gameOverHandler() {
     setIsGameOver(true);
+  }
+
+  function resetGame() {
+    setUserNumber("");
+    setIsGameOver(false);
   }
 
   let currentScreen = userNumber ? (
@@ -42,7 +49,12 @@ export default function App() {
         style={s.root}
         imageStyle={s.bgImage}
       >
-        <SafeAreaView style={s.root}>{currentScreen}</SafeAreaView>
+        <SafeAreaView style={s.root}>
+          {currentScreen}
+          <View style={s.contextBtn}>
+            <PrimaryButton onPress={resetGame}>Reset Game</PrimaryButton>
+          </View>
+        </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
   );
@@ -54,5 +66,10 @@ const s = StyleSheet.create({
   },
   bgImage: {
     opacity: 0.15,
+  },
+  contextBtn: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
 });
