@@ -1,4 +1,4 @@
-import { StyleSheet, Image, View, Text } from "react-native";
+import { StyleSheet, Image, View, Text, Dimensions } from "react-native";
 import { Title } from "../components/Title";
 import { Colors } from "../util/constants";
 
@@ -22,6 +22,8 @@ export function GameOver({ userNumber, roundNumber }: GameOverProps) {
   );
 }
 
+const dWidth = Dimensions.get("window").width;
+
 const s = StyleSheet.create({
   root: {
     flex: 1,
@@ -30,9 +32,10 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    width: 360,
-    height: 360,
-    borderRadius: 180,
+    // just an example, can use dynamic width "80%" instead
+    width: dWidth < 800 ? 250 : 600,
+    height: dWidth < 800 ? 250 : 600,
+    borderRadius: dWidth < 800 ? 125 : 300,
     borderWidth: 3,
     borderColor: Colors.primary600,
     overflow: "hidden",
