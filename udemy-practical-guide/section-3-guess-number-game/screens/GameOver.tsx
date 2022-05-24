@@ -1,4 +1,11 @@
-import { StyleSheet, Image, View, Text, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  View,
+  Text,
+  Dimensions,
+  useWindowDimensions,
+} from "react-native";
 import { Title } from "../components/Title";
 import { Colors } from "../util/constants";
 
@@ -8,10 +15,24 @@ interface GameOverProps {
 }
 
 export function GameOver({ userNumber, roundNumber }: GameOverProps) {
+  const { width, height } = useWindowDimensions();
+  let imageSize = {
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+  };
+  if (height < 768) {
+    imageSize = {
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+    };
+  }
+
   return (
     <View style={s.root}>
       <Title>GAME OVER</Title>
-      <View style={s.imageContainer}>
+      <View style={[s.imageContainer, imageSize]}>
         <Image style={s.image} source={require("../assets/success.png")} />
       </View>
       <Text style={s.summaryText}>
@@ -22,7 +43,7 @@ export function GameOver({ userNumber, roundNumber }: GameOverProps) {
   );
 }
 
-const dWidth = Dimensions.get("window").width;
+// const dWidth = Dimensions.get("window").width;
 
 const s = StyleSheet.create({
   root: {
@@ -33,9 +54,9 @@ const s = StyleSheet.create({
   },
   imageContainer: {
     // just an example, can use dynamic width "80%" instead
-    width: dWidth < 800 ? 250 : 600,
-    height: dWidth < 800 ? 250 : 600,
-    borderRadius: dWidth < 800 ? 125 : 300,
+    // width: dWidth < 800 ? 250 : 600,
+    // height: dWidth < 800 ? 250 : 600,
+    // borderRadius: dWidth < 800 ? 125 : 300,
     borderWidth: 3,
     borderColor: Colors.primary600,
     overflow: "hidden",
