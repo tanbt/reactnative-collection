@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Card } from "../components/Card";
 import { InstructionText } from "../components/InstructionText";
 import { NumberContainer } from "../components/NumberContainer";
@@ -35,6 +42,9 @@ let minBoundary = 1;
 let maxBoundary = 99;
 
 export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
+  const { width, height } = useWindowDimensions();
+  const rootMarginTop = height < 700 ? 15 : 100;
+
   const [currentGuess, setCurrentGuess] = useState<number>(() =>
     generateRandomBetween(minBoundary, maxBoundary, userNumber)
   );
@@ -84,9 +94,8 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
     ]);
   }
 
-  return (
-    <View style={s.rootContainer}>
-      <Title>Opponent's Guess</Title>
+  let content = (
+    <>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card>
         <View>
@@ -115,14 +124,61 @@ export function GameScreen({ userNumber, onGameOver }: GameScreenProps) {
           )}
         ></FlatList>
       </View>
+    </>
+  );
+
+  if (width >= 768) {
+    content = (
+      <View style={s.landscapeContent}>
+        <View>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <InstructionText style={s.instructionText}>
+            Higher or lower?
+          </InstructionText>
+          <PrimaryButton onPress={() => nextGuessHandler(Direction.HIGHER)}>
+            <Ionicons name="md-add" size={24} />
+          </PrimaryButton>
+          <PrimaryButton onPress={() => nextGuessHandler(Direction.LOWER)}>
+            {<Ionicons name="md-remove" size={24} />}
+          </PrimaryButton>
+          <PrimaryButton onPress={showHint}>Hint</PrimaryButton>
+        </View>
+
+        <View style={s.landscapeLog}>
+          <InstructionText style={s.instructionText}>
+            Your steps:
+          </InstructionText>
+          <FlatList
+            data={guessRounds}
+            renderItem={(item) => (
+              <GuessLogItem guess={item.item} round={item.index} />
+            )}
+          ></FlatList>
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={[s.rootContainer, { marginTop: rootMarginTop }]}>
+      <Title>Opponent's Guess</Title>
+      {content}
     </View>
   );
 }
 
 const s = StyleSheet.create({
+  landscapeContent: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 15,
+  },
+  landscapeLog: {
+    maxWidth: "40%",
+    maxHeight: "80%"
+  },
   rootContainer: {
     flext: 1,
-    marginTop: 100,
     marginHorizontal: 24,
     flexDirection: "column",
   },
