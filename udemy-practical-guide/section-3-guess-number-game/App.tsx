@@ -14,6 +14,7 @@ import { StartGameScreen } from "./screens/StartGameScreen";
 import { Colors } from "./util/constants";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 
 const bgImg: ImageRequireSource = require("./assets/background.png");
 
@@ -61,22 +62,25 @@ export default function App() {
   }
 
   return (
-    <LinearGradient colors={["#4e0329", Colors.accent500]} style={s.root}>
-      {/* @ts-ignore */}
-      <ImageBackground
-        source={bgImg}
-        resizeMode="cover"
-        style={s.root}
-        imageStyle={s.bgImage}
-      >
-        <SafeAreaView style={s.root}>
-          {currentScreen}
-          <View style={s.contextBtn}>
-            <PrimaryButton onPress={restartGame}>Restart Game</PrimaryButton>
-          </View>
-        </SafeAreaView>
-      </ImageBackground>
-    </LinearGradient>
+    <>
+      <StatusBar style="light" />
+      <LinearGradient colors={["#4e0329", Colors.accent500]} style={s.root}>
+        {/* @ts-ignore */}
+        <ImageBackground
+          source={bgImg}
+          resizeMode="cover"
+          style={s.root}
+          imageStyle={s.bgImage}
+        >
+          <SafeAreaView style={s.root}>
+            {currentScreen}
+            <View style={s.contextBtn}>
+              <PrimaryButton onPress={restartGame}>Restart Game</PrimaryButton>
+            </View>
+          </SafeAreaView>
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 }
 
