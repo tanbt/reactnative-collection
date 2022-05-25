@@ -8,7 +8,7 @@ import { SCREENS } from "../util/Constants";
 export function CategoriesScreen({ navigation }: NativeStackScreenProps<any>) {
   function renderCategoryItem(item: Category) {
     function pressHandler() {
-      navigation.navigate(SCREENS.Meals);
+      navigation.navigate(SCREENS.Meals, item);
     }
     return (
       <CategoryGridTile
