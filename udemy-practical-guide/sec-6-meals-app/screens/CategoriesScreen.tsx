@@ -3,11 +3,12 @@ import { FlatList } from "react-native";
 import { CategoryGridTile } from "../components/CategoryGridTile";
 import { CATEGORIES } from "../data/dummy-data";
 import Category from "../models/category";
+import { SCREENS } from "../util/Constants";
 
 export function CategoriesScreen({ navigation }: NativeStackScreenProps<any>) {
   function renderCategoryItem(item: Category) {
     function pressHandler() {
-      navigation.navigate("Meals");
+      navigation.navigate(SCREENS.Meals);
     }
     return (
       <CategoryGridTile
