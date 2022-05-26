@@ -7,6 +7,7 @@ import {
 import { useLayoutEffect } from "react";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { RootStackParamList } from "../App";
+import { IconButton } from "../components/IconButton";
 import { List } from "../components/MealDetail/List";
 import { Subtitle } from "../components/MealDetail/Subtitle";
 import { SCREENS } from "../util/Constants";
@@ -14,13 +15,29 @@ import { SCREENS } from "../util/Constants";
 type MealDetailRouteProp = RouteProp<RootStackParamList, SCREENS.MealDetail>;
 type MealDetailNavProp = NavigationProp<RootStackParamList, SCREENS.MealDetail>;
 
+// route and navigation props can be used here
 export function MealDetail() {
   const route = useRoute<MealDetailRouteProp>();
   const meal = route.params.meal;
   const navigation = useNavigation<MealDetailNavProp>();
+
+  function headerRightButtonHandler() {
+    console.log(meal.title);
+  }
+
   useLayoutEffect(() => {
-    navigation.setOptions({ title: meal.title });
+    navigation.setOptions({
+      title: meal.title,
+      headerRight: () => (
+        <IconButton
+          icon="star"
+          color="white"
+          onPress={headerRightButtonHandler}
+        />
+      ),
+    });
   }, [navigation, meal]);
+
   return (
     <ScrollView style={s.root}>
       <Image source={{ uri: meal.imageUrl }} style={s.image} />
