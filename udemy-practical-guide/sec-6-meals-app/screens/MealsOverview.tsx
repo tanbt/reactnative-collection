@@ -1,4 +1,5 @@
-import { useRoute } from "@react-navigation/native";
+import { NavigationProp, Route } from "@react-navigation/native";
+import { useLayoutEffect } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -11,10 +12,18 @@ import { MEALS } from "../data/dummy-data";
 import Category from "../models/category";
 import Meal from "../models/meal";
 
-export function MealsOverview() {
+interface Props {
+  navigation: NavigationProp<any>;
+  route: Route<"Meals", Category>;
+}
+
+export function MealsOverview({ navigation, route }: Props) {
   // An alternative to `route` prop
-  const route = useRoute();
+  // const route = useRoute();
   const { id: catId, title: catTitle } = route!.params as Category;
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: catTitle });
+  }, [catId, navigation]);
 
   const displayMeals = MEALS.filter(
     (mealItem) => mealItem.categoryIds.indexOf(catId) >= 0
