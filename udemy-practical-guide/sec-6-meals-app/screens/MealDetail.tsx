@@ -41,8 +41,6 @@ export function MealDetail() {
       <View style={s.listContainer}>
         <Subtitle title="Ingredients" />
         <List data={meal.ingredients} />
-        <Subtitle title="Steps" />
-        <List data={meal.steps} />
       </View>
     </ScrollView>
   );
@@ -51,6 +49,7 @@ export function MealDetail() {
 const s = StyleSheet.create({
   root: {
     marginBottom: 32,
+    backgroundColor: "#3f4f42",
   },
   image: {
     width: "100%",

@@ -5,6 +5,7 @@ import { CategoriesScreen } from "./screens/CategoriesScreen";
 import {
   NavigationContainer,
   RouteProp,
+  useNavigation,
   useRoute,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -18,7 +19,8 @@ import Meal from "./models/meal";
 import { FavoriteScreen } from "./screens/FavoriteScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MealDetailSteps } from "./screens/MealDetailSteps";
-import { MealDetailRouteProp } from "./types";
+import { MealDetailNavProp, MealDetailRouteProp } from "./types";
+import { useLayoutEffect } from "react";
 
 export type RootStackParamList = {
   Category: undefined; // prop name has to match screen name
@@ -70,22 +72,40 @@ function DrawerNavigator() {
 const Tab = createBottomTabNavigator();
 function MealTabNavigator() {
   const route = useRoute<MealDetailRouteProp>();
+  const navigation = useNavigation<MealDetailNavProp>();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: route.params.meal.title });
+  }, [navigation, route]);
+
   return (
-    <Tab.Navigator>
-      <Stack.Screen
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#351401" },
+      }}
+    >
+      <Tab.Screen
         name={SCREENS.MealDetail}
         component={MealDetail}
         initialParams={{ meal: route.params.meal }}
         options={{
+          tabBarLabel: "Ingredients",
           headerShown: false,
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="fast-food-sharp" {...{ size, color }} />
+          ),
         }}
       />
-      <Stack.Screen
+      <Tab.Screen
         name={SCREENS.MealDetailSteps}
         component={MealDetailSteps}
         initialParams={{ meal: route.params.meal }}
         options={{
+          tabBarLabel: "Steps",
           headerShown: false,
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="color-fill" {...{ size, color }} />
+          ),
         }}
       />
     </Tab.Navigator>
