@@ -1,4 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+
 import {
   Image,
   Platform,
@@ -7,13 +8,19 @@ import {
   Text,
   View,
 } from "react-native";
+import { RootStackParamList } from "../App";
 import Meal from "../models/meal";
 import { SCREENS } from "../util/Constants";
 
+type MealsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  SCREENS.Meals
+>;
+
 export function MealItem({ data }: { data: Meal }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MealsScreenNavigationProp>();
   function handleMealItemPress() {
-    navigation.navigate(SCREENS.MealDetail as never, data as never);
+    navigation.navigate(SCREENS.MealDetail, { meal: data });
   }
 
   return (

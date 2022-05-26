@@ -11,16 +11,17 @@ import { MealItem } from "../components/MealItem";
 import { MEALS } from "../data/dummy-data";
 import Category from "../models/category";
 import Meal from "../models/meal";
+import { SCREENS } from "../util/Constants";
 
 interface Props {
-  navigation: NavigationProp<any>;
-  route: Route<"Meals", Category>;
+  navigation: NavigationProp<Category>;
+  route: Route<SCREENS.Meals, Category>;
 }
 
 export function MealsOverview({ navigation, route }: Props) {
   // An alternative to `route` prop
   // const route = useRoute();
-  const { id: catId, title: catTitle } = route!.params as Category;
+  const { id: catId, title: catTitle } = route.params;
   useLayoutEffect(() => {
     navigation.setOptions({ title: catTitle });
   }, [catId, navigation]);

@@ -6,8 +6,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MealsOverview } from "./screens/MealsOverview";
 import { SCREENS } from "./util/Constants";
 import { MealDetail } from "./screens/MealDetail";
+import Category from "./models/category";
+import Meal from "./models/meal";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Category: undefined; // prop name has to match screen name
+  Meals: Category;
+  MealDetail: { meal: Meal };
+};
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
