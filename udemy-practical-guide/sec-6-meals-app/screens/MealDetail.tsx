@@ -1,19 +1,10 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { RootStackParamList } from "../App";
 import { IconButton } from "../components/IconButton";
 import { List } from "../components/MealDetail/List";
 import { Subtitle } from "../components/MealDetail/Subtitle";
-import { SCREENS } from "../util/Constants";
-
-type MealDetailRouteProp = RouteProp<RootStackParamList, SCREENS.MealDetail>;
-type MealDetailNavProp = NavigationProp<RootStackParamList, SCREENS.MealDetail>;
+import { MealDetailNavProp, MealDetailRouteProp } from "../types";
 
 // route and navigation props can be used here
 export function MealDetail() {

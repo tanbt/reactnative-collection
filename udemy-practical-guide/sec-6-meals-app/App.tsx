@@ -2,7 +2,11 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { CategoriesScreen } from "./screens/CategoriesScreen";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  RouteProp,
+  useRoute,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,12 +16,17 @@ import { MealDetail } from "./screens/MealDetail";
 import Category from "./models/category";
 import Meal from "./models/meal";
 import { FavoriteScreen } from "./screens/FavoriteScreen";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MealDetailSteps } from "./screens/MealDetailSteps";
+import { MealDetailRouteProp } from "./types";
 
 export type RootStackParamList = {
   Category: undefined; // prop name has to match screen name
   CategoryDrawer: undefined;
   Meals: Category;
+  MealDetailTab: { meal: Meal };
   MealDetail: { meal: Meal };
+  MealDetailSteps: { meal: Meal };
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -58,6 +67,31 @@ function DrawerNavigator() {
   );
 }
 
+const Tab = createBottomTabNavigator();
+function MealTabNavigator() {
+  const route = useRoute<MealDetailRouteProp>();
+  return (
+    <Tab.Navigator>
+      <Stack.Screen
+        name={SCREENS.MealDetail}
+        component={MealDetail}
+        initialParams={{ meal: route.params.meal }}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={SCREENS.MealDetailSteps}
+        component={MealDetailSteps}
+        initialParams={{ meal: route.params.meal }}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <>
@@ -83,7 +117,10 @@ export default function App() {
             component={MealsOverview}
             // options={({ route, navigation }) => route.params!.title}
           />
-          <Stack.Screen name={SCREENS.MealDetail} component={MealDetail} />
+          <Stack.Screen
+            name={SCREENS.MealDetailTab}
+            component={MealTabNavigator}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

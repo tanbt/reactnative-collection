@@ -8,19 +8,14 @@ import {
   Text,
   View,
 } from "react-native";
-import { RootStackParamList } from "../App";
 import Meal from "../models/meal";
+import { MealsScreenNavigationProp } from "../types";
 import { SCREENS } from "../util/Constants";
-
-type MealsScreenNavigationProp = NavigationProp<
-  RootStackParamList,
-  SCREENS.Meals
->;
 
 export function MealItem({ data }: { data: Meal }) {
   const navigation = useNavigation<MealsScreenNavigationProp>();
   function handleMealItemPress() {
-    navigation.navigate(SCREENS.MealDetail, { meal: data });
+    navigation.navigate(SCREENS.MealDetailTab, { meal: data });
   }
 
   return (
