@@ -23,7 +23,6 @@ export function MealDetailSteps() {
 
 const s = StyleSheet.create({
   root: {
-    marginBottom: 32,
     backgroundColor: "#3f4f42",
   },
   image: {
