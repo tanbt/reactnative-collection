@@ -9,6 +9,7 @@ import Category from "./models/category";
 import Meal from "./models/meal";
 import { DrawerNavigator } from "./screens/DrawerNavigator";
 import { MealTabNavigator } from "./screens/MealTabNavigator";
+import { AppContextProvider } from "./store/context/AppContext";
 
 export type RootStackParamList = {
   Category: undefined; // prop name has to match screen name
@@ -24,33 +25,35 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={SCREENS.Category}
-          screenOptions={{
-            headerStyle: { backgroundColor: "#351401" },
-            contentStyle: { backgroundColor: "#3f4f42" },
-            headerTintColor: "white",
-          }}
-        >
-          <Stack.Screen
-            name={SCREENS.CategoryDrawer}
-            component={DrawerNavigator}
-            options={{
-              headerShown: false,
+      <AppContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={SCREENS.Category}
+            screenOptions={{
+              headerStyle: { backgroundColor: "#351401" },
+              contentStyle: { backgroundColor: "#3f4f42" },
+              headerTintColor: "white",
             }}
-          />
-          <Stack.Screen
-            name={SCREENS.Meals}
-            component={MealsOverview}
-            // options={({ route, navigation }) => route.params!.title}
-          />
-          <Stack.Screen
-            name={SCREENS.MealDetailTab}
-            component={MealTabNavigator}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+          >
+            <Stack.Screen
+              name={SCREENS.CategoryDrawer}
+              component={DrawerNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={SCREENS.Meals}
+              component={MealsOverview}
+              // options={({ route, navigation }) => route.params!.title}
+            />
+            <Stack.Screen
+              name={SCREENS.MealDetailTab}
+              component={MealTabNavigator}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppContextProvider>
     </>
   );
 }

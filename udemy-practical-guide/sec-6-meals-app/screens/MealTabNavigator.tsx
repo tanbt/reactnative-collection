@@ -7,21 +7,36 @@ import { Ionicons } from "@expo/vector-icons";
 import { MealDetailNavProp, MealDetailRouteProp } from "../types";
 import { MealDetailSteps } from "./MealDetailSteps";
 import { IconButton } from "../components/IconButton";
+import { useContext } from "../store/context/AppContext";
 
 const Tab = createBottomTabNavigator();
 
 export function MealTabNavigator() {
   const route = useRoute<MealDetailRouteProp>();
   const navigation = useNavigation<MealDetailNavProp>();
+  const { meal } = route.params;
+  const [appState, toggleFavorite] = useContext();
+
+  function toggleFavoriteHandler() {
+    toggleFavorite(meal.id);
+  }
 
   useLayoutEffect(() => {
+    const fIcon = appState.favoriteIds.includes(meal.id)
+      ? "star"
+      : "star-outline";
+
     navigation.setOptions({
-      title: route.params.meal.title,
+      title: meal.title,
       headerRight: () => (
-        <IconButton icon="star" color="white" onPress={() => {}} />
+        <IconButton
+          icon={fIcon}
+          color="white"
+          onPress={toggleFavoriteHandler}
+        />
       ),
     });
-  }, [navigation, route]);
+  }, [navigation, route, toggleFavoriteHandler]);
 
   return (
     <Tab.Navigator
