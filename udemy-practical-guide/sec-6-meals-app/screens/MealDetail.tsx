@@ -1,33 +1,13 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
+import { useRoute } from "@react-navigation/native";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { IconButton } from "../components/IconButton";
 import { List } from "../components/MealDetail/List";
 import { Subtitle } from "../components/MealDetail/Subtitle";
-import { MealDetailNavProp, MealDetailRouteProp } from "../types";
+import { MealDetailRouteProp } from "../types";
 
 // route and navigation props can be used here
 export function MealDetail() {
   const route = useRoute<MealDetailRouteProp>();
   const meal = route.params.meal;
-  const navigation = useNavigation<MealDetailNavProp>();
-
-  function headerRightButtonHandler() {
-    console.log(meal.title);
-  }
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: meal.title,
-      headerRight: () => (
-        <IconButton
-          icon="star"
-          color="white"
-          onPress={headerRightButtonHandler}
-        />
-      ),
-    });
-  }, [navigation, meal]);
 
   return (
     <ScrollView style={s.root}>
