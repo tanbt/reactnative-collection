@@ -1,3 +1,4 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import {
   Image,
   Platform,
@@ -7,14 +8,21 @@ import {
   View,
 } from "react-native";
 import Meal from "../models/meal";
+import { SCREENS } from "../util/Constants";
 
 export function MealItem({ data }: { data: Meal }) {
+  const navigation = useNavigation();
+  function handleMealItemPress() {
+    navigation.navigate(SCREENS.MealDetail as never, data as never);
+  }
+
   return (
     <View style={s.mealItem}>
       <View style={s.innerContainer}>
         <Pressable
           android_ripple={{ color: "#cccccc" }}
           style={({ pressed }) => (pressed ? s.buttonPressed : null)}
+          onPress={handleMealItemPress}
         >
           <View>
             <Image source={{ uri: data.imageUrl }} style={s.image} />
