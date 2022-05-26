@@ -7,8 +7,8 @@ import { MealsOverview } from "./screens/MealsOverview";
 import { SCREENS } from "./util/Constants";
 import Category from "./models/category";
 import Meal from "./models/meal";
-import { DrawerNavigator } from "./screens/DrawerNavigator";
-import { MealTabNavigator } from "./screens/MealTabNavigator";
+import { DrawerNavigator } from "./screens/navigator/DrawerNavigator";
+import { MealTabNavigator } from "./screens/navigator/MealTabNavigator";
 import { AppContextProvider } from "./store/context/AppContext";
 
 export type RootStackParamList = {

@@ -1,13 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
-import { SCREENS } from "../util/Constants";
-import { MealDetail } from "./MealDetail";
+import { SCREENS } from "../../util/Constants";
+import { MealDetail } from "../MealDetail";
 import { Ionicons } from "@expo/vector-icons";
-import { MealDetailNavProp, MealDetailRouteProp } from "../types";
-import { MealDetailSteps } from "./MealDetailSteps";
-import { IconButton } from "../components/IconButton";
-import { useContext } from "../store/context/AppContext";
+import { MealDetailNavProp, MealDetailRouteProp } from "../../types";
+import { MealDetailSteps } from "../MealDetailSteps";
+import { IconButton } from "../../components/IconButton";
+import { useContext } from "../../store/context/AppContext";
 
 const Tab = createBottomTabNavigator();
 

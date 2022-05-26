@@ -13,7 +13,7 @@ export function AppContextProvider(props: any) {
   });
 
   function toggleFavorite(id: string) {
-    let newFavoriteIds = [];
+    let newFavoriteIds = appState.favoriteIds;
 
     if (appState.favoriteIds.includes(id)) {
       newFavoriteIds = appState.favoriteIds.filter(
