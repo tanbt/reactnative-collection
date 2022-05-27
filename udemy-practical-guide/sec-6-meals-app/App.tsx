@@ -9,7 +9,9 @@ import Category from "./models/category";
 import Meal from "./models/meal";
 import { DrawerNavigator } from "./screens/navigator/DrawerNavigator";
 import { MealTabNavigator } from "./screens/navigator/MealTabNavigator";
-import { AppContextProvider } from "./store/context/AppContext";
+// import { AppContextProvider } from "./store/context/AppContext";
+import { Provider } from "react-redux";
+import { store } from "./store/redux/store";
 
 export type RootStackParamList = {
   Category: undefined; // prop name has to match screen name
@@ -25,7 +27,8 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <AppContextProvider>
+      {/* <AppContextProvider> */}
+      <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName={SCREENS.Category}
@@ -53,7 +56,8 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </AppContextProvider>
+      </Provider>
+      {/* </AppContextProvider> */}
     </>
   );
 }

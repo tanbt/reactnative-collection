@@ -7,7 +7,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { MealDetailNavProp, MealDetailRouteProp } from "../../types";
 import { MealDetailSteps } from "../MealDetailSteps";
 import { IconButton } from "../../components/IconButton";
-import { useContext } from "../../store/context/AppContext";
+// import { useContext } from "../../store/context/AppContext";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../../store/redux/favorites";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,16 +17,19 @@ export function MealTabNavigator() {
   const route = useRoute<MealDetailRouteProp>();
   const navigation = useNavigation<MealDetailNavProp>();
   const { meal } = route.params;
-  const [appState, toggleFavorite] = useContext();
+  // const [appState, toggleFavorite] = useContext();
+  const favoriteMealIds = useSelector<any, any>(
+    (state) => state.favoriteMeals.ids
+  );
+  const dispatch = useDispatch();
 
   function toggleFavoriteHandler() {
-    toggleFavorite(meal.id);
+    // toggleFavorite(meal.id);
+    dispatch(toggleFavorite({ id: meal.id }));
   }
 
   useLayoutEffect(() => {
-    const fIcon = appState.favoriteIds.includes(meal.id)
-      ? "star"
-      : "star-outline";
+    const fIcon = favoriteMealIds.includes(meal.id) ? "star" : "star-outline";
 
     navigation.setOptions({
       title: meal.title,
