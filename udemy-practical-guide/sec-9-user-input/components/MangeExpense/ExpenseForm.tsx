@@ -1,8 +1,35 @@
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Input } from "./Input";
 
+interface InputValues {
+  amount: string; // TextInput component always contains string
+  date: string;
+  description: string;
+}
+
 export function ExpenseForm() {
-  function amountChangeHandler() {}
+  const [inputValues, setInputValues] = useState<InputValues>({
+    amount: "",
+    date: "",
+    description: "",
+  });
+
+  function inputChangeHandler(value: object) {
+    setInputValues((currentValues) => {
+      return { ...currentValues, ...value };
+    });
+  }
+
+  // Example of dynamic property access by variable
+  function inputChangeHandler2(identifier, value) {
+    setInputValues((currentValues) => {
+      return {
+        ...currentValues,
+        [identifier]: value,
+      };
+    });
+  }
 
   return (
     <View style={s.root}>
@@ -13,7 +40,9 @@ export function ExpenseForm() {
           style={s.rowInput}
           textInputConfig={{
             keyboardType: "decimal-pad",
-            onChangeText: amountChangeHandler,
+            onChangeText: (amount: string) =>
+              inputChangeHandler2("amount", amount),
+            value: inputValues.amount,
           }}
         />
         <Input
@@ -22,7 +51,8 @@ export function ExpenseForm() {
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
-            onChangeText: () => {},
+            onChangeText: (date: string) => inputChangeHandler({ date }),
+            value: inputValues.date,
           }}
         />
       </View>
@@ -32,6 +62,9 @@ export function ExpenseForm() {
           multiline: true,
           // autoCorrect: true
           // autoCapitalize: "sentences"
+          onChangeText: (description: string) =>
+            inputChangeHandler({ description }),
+          value: inputValues.description,
         }}
       />
     </View>
