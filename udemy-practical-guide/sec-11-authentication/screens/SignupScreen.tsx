@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import { useState } from "react";
 import { Alert } from "react-native";
 import AuthContent from "../components/Auth/AuthContent";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import { AppContext, AppState } from "../store/AppContext";
 import { createUser } from "../util/auth";
 
 export type AuthEntity = {
@@ -11,11 +13,13 @@ export type AuthEntity = {
 
 function SignupScreen() {
   const [isSending, setIsSending] = useState<boolean>(false);
+  const appCtx = useContext<AppState>(AppContext);
 
   async function signupHandler({ email, password }: AuthEntity) {
     setIsSending(true);
     try {
-      await createUser(email, password);
+      const token = await createUser(email, password);
+      appCtx.authenticate(token);
     } catch (err) {
       Alert.alert(
         "Sign Up Failed",
