@@ -3,16 +3,16 @@ import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   icon: string;
-  color: string;
+  color: string | undefined;
   size: number;
-  onPress: () => void;
+  onPress: Function;
 }
 
 function IconButton({ icon, color, size, onPress }: Props) {
   return (
     <Pressable
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-      onPress={onPress}
+      onPress={() => onPress()}
     >
       <Ionicons name={icon} color={color} size={size} />
     </Pressable>
