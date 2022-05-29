@@ -8,12 +8,26 @@ import { Colors } from "../../constants/Colors";
 import { OutlinedButton } from "../UI/OutlinedButton";
 import { getMapPreview, Location } from "../../util/location";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import { useEffect } from "react";
 
 export function LocationPicker() {
   const [location, setLocation] = useState<Location>();
   const [locationPermStatus, requestPermission] = useForegroundPermissions();
   const navigation = useNavigation<any>();
+  const isFocussed = useIsFocused(); // !!! IMPORTANT
+  const route = useRoute<any>();
+
+  useEffect(() => {
+    if (isFocussed && route.params) {
+      const { latitude: lat, longitude: lng } = route.params.pickedLocation;
+      setLocation({ lat, lng });
+    }
+  }, [route, isFocussed]);
 
   async function verifyPermission(): Promise<boolean> {
     if (locationPermStatus?.status === PermissionStatus.UNDETERMINED) {
