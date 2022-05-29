@@ -1,6 +1,7 @@
 import { useContext, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ExpenseForm, FormValue } from "../components/MangeExpense/ExpenseForm";
+import { ErrorOverlay } from "../components/UI/ErrorOverlay";
 
 import IconButton from "../components/UI/IconButton";
 import { LoadingOverlay } from "../components/UI/LoadingOverlay";
@@ -10,6 +11,8 @@ import { deleteExpense, storeExpense, updateExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
   const [isSending, setIsSending] = useState<boolean>(false);
+  const [sendingError, setSendingError] = useState<string>();
+
   const expensesCtx = useContext(ExpensesContext);
 
   const editedExpenseId = route.params?.expenseId;
@@ -27,10 +30,15 @@ function ManageExpense({ route, navigation }) {
 
   async function deleteExpenseHandler() {
     setIsSending(true);
-    expensesCtx.deleteExpense(editedExpenseId);
-    deleteExpense(editedExpenseId);
-    // setIsSending(false);
-    navigation.goBack();
+    try {
+      await deleteExpense(editedExpenseId);
+      expensesCtx.deleteExpense(editedExpenseId);
+      // setIsSending(false);
+      navigation.goBack();
+    } catch (err) {
+      setIsSending(false);
+      setSendingError("Could not delete the expense.");
+    }
   }
 
   function cancelHandler() {
@@ -39,17 +47,30 @@ function ManageExpense({ route, navigation }) {
 
   async function confirmHandler(formValue: FormValue) {
     setIsSending(true);
-    if (isEditing) {
-      expensesCtx.updateExpense(editedExpenseId, formValue);
-      updateExpense(editedExpenseId, formValue);
-    } else {
-      const id = await storeExpense(formValue);
-      expensesCtx.addExpense({ ...formValue, id });
+    try {
+      if (isEditing) {
+        await updateExpense(editedExpenseId, formValue);
+        expensesCtx.updateExpense(editedExpenseId, formValue);
+      } else {
+        const id = await storeExpense(formValue);
+        expensesCtx.addExpense({ ...formValue, id });
+      }
+      // setIsSending(false);
+      navigation.goBack();
+    } catch (err) {
+      setIsSending(false);
+      setSendingError("Could not save the expense.");
     }
-    // setIsSending(false);
-    navigation.goBack();
   }
 
+  if (sendingError && !isSending) {
+    return (
+      <ErrorOverlay
+        message={sendingError}
+        onConfirm={() => setSendingError(null)}
+      />
+    );
+  }
   if (isSending) {
     return <LoadingOverlay />;
   }
