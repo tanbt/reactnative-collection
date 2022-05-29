@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { Alert } from "react-native";
 import AuthContent from "../components/Auth/AuthContent";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { createUser } from "../util/auth";
 
-type SignupEntity = {
+export type AuthEntity = {
   email: string;
   password: string;
 };
@@ -11,9 +12,16 @@ type SignupEntity = {
 function SignupScreen() {
   const [isSending, setIsSending] = useState<boolean>(false);
 
-  async function signupHandler({ email, password }: SignupEntity) {
+  async function signupHandler({ email, password }: AuthEntity) {
     setIsSending(true);
-    await createUser(email, password);
+    try {
+      await createUser(email, password);
+    } catch (err) {
+      Alert.alert(
+        "Sign Up Failed",
+        "Could not create the user. Please try again."
+      );
+    }
     setIsSending(false);
   }
 
