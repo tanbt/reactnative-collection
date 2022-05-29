@@ -18,8 +18,10 @@ function LoginScreen() {
       appCtx.authenticate(token);
     } catch (err) {
       Alert.alert("Login failed", "Wrong email or password! Please try again.");
+      // After authenticated successfully, the old Navigation stack is not rendered,
+      //  so that updating `isSending` causes unable to updated unmounted component.
+      setIsSending(false);
     }
-    setIsSending(false);
   }
 
   if (isSending) {

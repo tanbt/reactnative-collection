@@ -25,8 +25,8 @@ function SignupScreen() {
         "Sign Up Failed",
         "Could not create the user. Please try again."
       );
+      setIsSending(false);
     }
-    setIsSending(false);
   }
 
   if (isSending) {
