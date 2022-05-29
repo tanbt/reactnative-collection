@@ -4,6 +4,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import FlatButton from "../ui/FlatButton";
 import AuthForm, { CredentialValidity } from "./AuthForm";
 import { Colors } from "../../constants/styles";
+import { useNavigation } from "@react-navigation/native";
 
 type Credential = {
   email: string;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 function AuthContent({ isLogin, onAuthenticate }: Props) {
+  const navigation = useNavigation<any>();
   const [credentialsInvalid, setCredentialsInvalid] =
     useState<CredentialValidity>({
       email: false,
@@ -27,7 +29,12 @@ function AuthContent({ isLogin, onAuthenticate }: Props) {
     });
 
   function switchAuthModeHandler() {
-    // Todo
+    if (isLogin) {
+      // no need to show Back button
+      navigation.replace("Signup");
+    } else {
+      navigation.replace("Login");
+    }
   }
 
   function submitHandler(credentials: Credential) {
