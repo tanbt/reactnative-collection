@@ -6,8 +6,9 @@ const baseUrl =
 
 const expenseEndpoint = baseUrl + "/expenses.json";
 
-export async function storeExpense(expenseData) {
-  return axios.post(expenseEndpoint, expenseData);
+export async function storeExpense(expenseData): Promise<string> {
+  const response = await axios.post(expenseEndpoint, expenseData);
+  return response.data.name;
 }
 
 export async function fetchExpenses(): Promise<Expense[]> {
