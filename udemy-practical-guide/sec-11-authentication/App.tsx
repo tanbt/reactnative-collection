@@ -7,8 +7,10 @@ import SignupScreen from "./screens/SignupScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Colors } from "./constants/styles";
 import { AppContext, AppContextProvider, AppState } from "./store/AppContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import IconButton from "./components/ui/IconButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,12 +70,37 @@ function Navigation() {
   );
 }
 
+function Root() {
+  const [appIsReady, setAppIsReady] = useState<boolean>(false);
+  const appCtx = useContext<AppState>(AppContext);
+
+  useEffect(() => {
+    async function fetchToken() {
+      await SplashScreen.preventAutoHideAsync();
+
+      const storedToken = await AsyncStorage.getItem("token");
+      if (storedToken) {
+        appCtx.authenticate(storedToken);
+      }
+      await SplashScreen.hideAsync();
+      setAppIsReady(true);
+    }
+    fetchToken();
+  }, []);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+  return <Navigation />;
+}
+
 export default function App() {
   return (
     <>
       <StatusBar style="light" />
       <AppContextProvider>
-        <Navigation />
+        <Root />
       </AppContextProvider>
     </>
   );
