@@ -1,4 +1,5 @@
 import axios from "axios";
+import { FormValue } from "../components/MangeExpense/ExpenseForm";
 import { Expense } from "../store/expenses-context";
 
 const baseUrl =
@@ -25,4 +26,17 @@ export async function fetchExpenses(): Promise<Expense[]> {
     });
   }
   return expenses;
+}
+
+export async function updateExpense(id: string, expenseData: FormValue) {
+  const { amount, date, description } = expenseData;
+  return axios.put(baseUrl + `/expenses/${id}.json`, {
+    amount,
+    date,
+    description,
+  });
+}
+
+export async function deleteExpense(id: string) {
+  return axios.delete(baseUrl + `/expenses/${id}.json`);
 }
