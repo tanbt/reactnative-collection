@@ -1,14 +1,27 @@
-import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
-import Button from '../ui/Button';
-import Input from './Input';
+import Button from "../ui/Button";
+import Input from "./Input";
 
-function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredConfirmEmail, setEnteredConfirmEmail] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
+export type CredentialValidity = {
+  email: boolean;
+  confirmEmail: boolean;
+  password: boolean;
+  confirmPassword: boolean;
+};
+
+interface Props {
+  isLogin: boolean;
+  onSubmit: Function;
+  credentialsInvalid: CredentialValidity;
+}
+
+function AuthForm({ isLogin, onSubmit, credentialsInvalid }: Props) {
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
+  const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
 
   const {
     email: emailIsInvalid,
@@ -17,18 +30,18 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
     confirmPassword: passwordsDontMatch,
   } = credentialsInvalid;
 
-  function updateInputValueHandler(inputType, enteredValue) {
+  function updateInputValueHandler(inputType: string, enteredValue: any) {
     switch (inputType) {
-      case 'email':
+      case "email":
         setEnteredEmail(enteredValue);
         break;
-      case 'confirmEmail':
+      case "confirmEmail":
         setEnteredConfirmEmail(enteredValue);
         break;
-      case 'password':
+      case "password":
         setEnteredPassword(enteredValue);
         break;
-      case 'confirmPassword':
+      case "confirmPassword":
         setEnteredConfirmPassword(enteredValue);
         break;
     }
@@ -48,7 +61,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       <View>
         <Input
           label="Email Address"
-          onUpdateValue={updateInputValueHandler.bind(this, 'email')}
+          onUpdateValue={(text) => updateInputValueHandler("email", text)}
           value={enteredEmail}
           keyboardType="email-address"
           isInvalid={emailIsInvalid}
@@ -56,7 +69,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         {!isLogin && (
           <Input
             label="Confirm Email Address"
-            onUpdateValue={updateInputValueHandler.bind(this, 'confirmEmail')}
+            onUpdateValue={(text) =>
+              updateInputValueHandler("confirmEmail", text)
+            }
             value={enteredConfirmEmail}
             keyboardType="email-address"
             isInvalid={emailsDontMatch}
@@ -64,7 +79,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         <Input
           label="Password"
-          onUpdateValue={updateInputValueHandler.bind(this, 'password')}
+          onUpdateValue={(text) => updateInputValueHandler("password", text)}
           secure
           value={enteredPassword}
           isInvalid={passwordIsInvalid}
@@ -72,10 +87,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         {!isLogin && (
           <Input
             label="Confirm Password"
-            onUpdateValue={updateInputValueHandler.bind(
-              this,
-              'confirmPassword'
-            )}
+            onUpdateValue={(text) =>
+              updateInputValueHandler("confirmPassword", text)
+            }
             secure
             value={enteredConfirmPassword}
             isInvalid={passwordsDontMatch}
@@ -83,7 +97,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         <View style={styles.buttons}>
           <Button onPress={submitHandler}>
-            {isLogin ? 'Log In' : 'Sign Up'}
+            {isLogin ? "Log In" : "Sign Up"}
           </Button>
         </View>
       </View>
@@ -97,4 +111,5 @@ const styles = StyleSheet.create({
   buttons: {
     marginTop: 12,
   },
+  form: {},
 });
