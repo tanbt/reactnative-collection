@@ -1,9 +1,20 @@
+import * as SQLite from "expo-sqlite";
+import { Alert } from "react-native";
 import { PlaceForm } from "../components/places/PlaceForm";
 import { Place } from "../models/place";
+import { insertPlace } from "../util/database";
 
 export function AddPlace({ navigation }: any) {
-  function handleCreatePlace(place: Place) {
-    navigation.navigate("AllPlaces", { place });
+  async function handleCreatePlace(place: Place) {
+    try {
+      const result = (await insertPlace(place)) as SQLite.SQLResultSet;
+      if (result.rowsAffected !== 1) {
+        throw new Error("No place saved.");
+      }
+      navigation.navigate("AllPlaces", { place });
+    } catch (err) {
+      Alert.alert("Error", "Failed to save the new place.");
+    }
   }
 
   return <PlaceForm onCreatePlace={handleCreatePlace} />;
