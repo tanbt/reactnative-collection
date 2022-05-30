@@ -1,6 +1,7 @@
 // https://console.cloud.google.com/google/maps-apis/credentials?project=udemy-reactnative-course
 const GOOGLE_API_KEY = "AIzaSyCZ4njMN1XAcSgJSL4zUgjEXFc8akWclzU";
 
+// Todo: replace with `import { LatLng } from "react-native-maps";`
 export type Location = { lat: number; lng: number };
 
 export function getMapPreview({ lat, lng }: Location) {

@@ -15,7 +15,11 @@ import {
 } from "@react-navigation/native";
 import { useEffect } from "react";
 
-export function LocationPicker() {
+interface Props {
+  onPickLocation: (loc: Location) => void;
+}
+
+export function LocationPicker({ onPickLocation }: Props) {
   const [location, setLocation] = useState<Location>();
   const [locationPermStatus, requestPermission] = useForegroundPermissions();
   const navigation = useNavigation<any>();
@@ -28,6 +32,12 @@ export function LocationPicker() {
       setLocation({ lat, lng });
     }
   }, [route, isFocussed]);
+
+  useEffect(() => {
+    // instead of calling `onPickLocation` along with `setLocation`,
+    // use this effect depending on `location` changes.
+    location && onPickLocation(location);
+  }, [location]);
 
   async function verifyPermission(): Promise<boolean> {
     if (locationPermStatus?.status === PermissionStatus.UNDETERMINED) {
