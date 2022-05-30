@@ -7,10 +7,29 @@ import { AddPlace } from "./screens/AddPlace";
 import { IconButton } from "./components/UI/IconButton";
 import { Colors } from "./constants/Colors";
 import { Map } from "./screens/Map";
+import { useEffect, useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import { init } from "./util/database";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [appIsReady, setAppIsReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+      await init(); // should have try/catch here
+      await SplashScreen.hideAsync();
+      setAppIsReady(true);
+    }
+    prepare();
+  }, []);
+
+  if (!appIsReady) {
+    return null;
+  }
+
   return (
     <>
       <StatusBar style="dark" />
