@@ -23,8 +23,6 @@ export function Map() {
     setSelectedLocation({ ...event.nativeEvent.coordinate });
   }
 
-  useEffect(() => console.log(selectedLocation), [selectedLocation]);
-
   const savePickedLocationHandler = useCallback(() => {
     if (!selectedLocation) {
       Alert.alert(

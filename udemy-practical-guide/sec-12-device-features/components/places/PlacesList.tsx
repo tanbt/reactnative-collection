@@ -14,6 +14,7 @@ export function PlacesList({ places }: { places: Place[] }) {
 
   return (
     <FlatList
+      style={s.listWrapper}
       data={places}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <PlaceItem place={item} onSelect={() => {}} />}
@@ -29,6 +30,9 @@ const s = StyleSheet.create({
   },
   noPlacesText: {
     fontSize: 16,
-    color: Colors.primary200
+    color: Colors.primary200,
+  },
+  listWrapper: {
+    margin: 12,
   },
 });
