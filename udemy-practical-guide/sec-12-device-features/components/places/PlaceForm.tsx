@@ -9,14 +9,17 @@ import { LocationPicker } from "./LocationPicker";
 export function PlaceForm() {
   const [enteredTitle, setEnteredTitle] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<string>();
-  const [pickedLocation, setPickedLocation] = useState<Location>();
+  const [pickedLocation, setPickedLocation] = useState<{
+    location: Location;
+    address: string;
+  }>();
 
   function changeTitleHandler(val: string) {
     setEnteredTitle(val);
   }
 
-  function pickLocationHandler(location: Location) {
-    setPickedLocation(location);
+  function pickLocationHandler(location: Location, address: string) {
+    setPickedLocation({ location, address });
   }
 
   function takeImageHandler(imageUrl: string) {

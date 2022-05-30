@@ -6,7 +6,7 @@ import { PermissionStatus } from "expo-image-picker";
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { OutlinedButton } from "../UI/OutlinedButton";
-import { getMapPreview, Location } from "../../util/location";
+import { getAddress, getMapPreview, Location } from "../../util/location";
 import { useState } from "react";
 import {
   useIsFocused,
@@ -16,7 +16,7 @@ import {
 import { useEffect } from "react";
 
 interface Props {
-  onPickLocation: (loc: Location) => void;
+  onPickLocation: (location: Location, address: string) => void;
 }
 
 export function LocationPicker({ onPickLocation }: Props) {
@@ -33,10 +33,15 @@ export function LocationPicker({ onPickLocation }: Props) {
     }
   }, [route, isFocussed]);
 
+  // instead of calling `onPickLocation` along with `setLocation`,
+  // use this effect depending on `location` changes.
   useEffect(() => {
-    // instead of calling `onPickLocation` along with `setLocation`,
-    // use this effect depending on `location` changes.
-    location && onPickLocation(location);
+    (async () => {
+      if (location) {
+        const address = await getAddress(location);
+        onPickLocation(location, address);
+      }
+    })();
   }, [location]);
 
   async function verifyPermission(): Promise<boolean> {

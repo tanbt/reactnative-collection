@@ -15,3 +15,14 @@ export function getMapPreview({ lat, lng }: Location) {
 
   return url;
 }
+
+export async function getAddress({ lat, lng }: Location) {
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to get the address!");
+  }
+
+  const data = await response.json();
+  return (<any>data).results[0].formatted_address;
+}
