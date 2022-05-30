@@ -4,14 +4,11 @@ type Location = {
 };
 
 export class Place {
-  public readonly id: string;
-
   constructor(
+    public readonly id: number,
     public readonly title: string,
     public readonly imageUri: string,
     public readonly address: string,
     public readonly location: Location
-  ) {
-    this.id = new Date().toString() + Math.random().toString();
-  }
+  ) {}
 }

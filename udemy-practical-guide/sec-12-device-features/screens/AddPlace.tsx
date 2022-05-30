@@ -11,7 +11,7 @@ export function AddPlace({ navigation }: any) {
       if (result.rowsAffected !== 1) {
         throw new Error("No place saved.");
       }
-      navigation.navigate("AllPlaces", { place });
+      navigation.navigate("AllPlaces");
     } catch (err) {
       Alert.alert("Error", "Failed to save the new place.");
     }

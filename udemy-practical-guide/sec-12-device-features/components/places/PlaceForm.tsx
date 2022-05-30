@@ -12,7 +12,9 @@ interface Props {
 }
 
 export function PlaceForm({ onCreatePlace }: Props) {
-  const [enteredTitle, setEnteredTitle] = useState<string>("");
+  const [enteredTitle, setEnteredTitle] = useState<string>(
+    `Your place ${new Date().toDateString()}`
+  );
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [pickedLocation, setPickedLocation] = useState<{
     location: Location;
@@ -33,6 +35,7 @@ export function PlaceForm({ onCreatePlace }: Props) {
 
   function savePlaceHandler() {
     const placeData = new Place(
+      Math.random(),
       enteredTitle,
       selectedImage,
       pickedLocation?.address,

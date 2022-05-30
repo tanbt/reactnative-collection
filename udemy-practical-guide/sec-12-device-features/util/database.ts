@@ -41,8 +41,40 @@ export function insertPlace(
             place.location.lng,
           ],
           (_, result) => {
-            console.log(result);
             resolve(result);
+          },
+          (_, error) => reject(error)
+        );
+      });
+    }
+  );
+  return promise;
+}
+
+export function fetchPlaces(): Promise<Place[] | SQLite.SQLError> {
+  const promise = new Promise<Place[] | SQLite.SQLError>(
+    (resolve: any, reject: any) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM places",
+          [],
+          (_, result) => {
+            const places: Place[] = [];
+            for (const dbPlace of result.rows._array) {
+              places.push(
+                new Place(
+                  dbPlace.id,
+                  dbPlace.title,
+                  dbPlace.imageUri,
+                  dbPlace.address,
+                  {
+                    lat: dbPlace.lat,
+                    lng: dbPlace.lng,
+                  }
+                )
+              );
+            }
+            resolve(places);
           },
           (_, error) => reject(error)
         );

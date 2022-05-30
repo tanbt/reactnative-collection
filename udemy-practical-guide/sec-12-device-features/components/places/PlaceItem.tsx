@@ -17,6 +17,7 @@ export function PlaceItem({ place, onSelect }: Props) {
       <View style={s.info}>
         <Text style={s.title}>{place.title || place.address}</Text>
         <Text style={s.address}>{place.address}</Text>
+        <Text style={s.id}>[id: {place.id}]</Text>
       </View>
     </Pressable>
   );
@@ -58,5 +59,9 @@ const s = StyleSheet.create({
   address: {
     fontSize: 12,
     color: Colors.gray700,
+  },
+  id: {
+    textAlign: "right",
+    fontSize: 8,
   },
 });
