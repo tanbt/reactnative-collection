@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { LatLng } from "react-native-maps";
 import { Colors } from "../../constants/Colors";
 import { Place } from "../../models/place";
-import { Location } from "../../util/location";
 import { Button } from "../UI/Button";
 import { ImagePicker } from "./ImagePicker";
 import { LocationPicker } from "./LocationPicker";
@@ -17,15 +17,15 @@ export function PlaceForm({ onCreatePlace }: Props) {
   );
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [pickedLocation, setPickedLocation] = useState<{
-    location: Location;
+    location: LatLng;
     address: string;
-  }>({ location: { lat: -1, lng: -1 }, address: "" });
+  }>({ location: { latitude: -1, longitude: -1 }, address: "" });
 
   function changeTitleHandler(val: string) {
     setEnteredTitle(val);
   }
 
-  function pickLocationHandler(location: Location, address: string) {
+  function pickLocationHandler(location: LatLng, address: string) {
     setPickedLocation({ location, address });
   }
 

@@ -28,9 +28,9 @@ export function PlaceDetail({ navigation, route }: any) {
   }, [placeId]);
 
   function viewOnMapHandler() {
-    const { lat: latitude, lng: longitude } = place?.location || {
-      lat: 0,
-      lng: 0,
+    const { latitude, longitude } = place?.location || {
+      latitude: 0,
+      longitude: 0,
     };
     const curLocation: LatLng = { latitude, longitude };
     navigation.navigate("Map", {

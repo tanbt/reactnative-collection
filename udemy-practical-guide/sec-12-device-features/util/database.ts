@@ -12,8 +12,8 @@ export function init(): Promise<any> {
         title TEXT NOT NULL,
         imageUri TEXT NOT NULL,
         address TEXT NOT NULL,
-        lat REAL NOT NULL,
-        lng REAL NOT NULL
+        latitude REAL NOT NULL,
+        longitude REAL NOT NULL
       )`,
         [],
         () => resolve(),
@@ -31,14 +31,14 @@ export function insertPlace(
     (resolve: any, reject: any) => {
       database.transaction((tx) => {
         tx.executeSql(
-          `INSERT INTO places(title, imageUri, address, lat, lng) 
+          `INSERT INTO places(title, imageUri, address, latitude, longitude) 
       VALUES(?, ? , ? , ? ,?)`,
           [
             place.title,
             place.imageUri,
             place.address,
-            place.location.lat,
-            place.location.lng,
+            place.location.latitude,
+            place.location.longitude,
           ],
           (_, result) => {
             resolve(result);
@@ -61,18 +61,7 @@ export function fetchPlaces(): Promise<Place[] | SQLite.SQLError> {
           (_, result) => {
             const places: Place[] = [];
             for (const dbPlace of result.rows._array) {
-              places.push(
-                new Place(
-                  dbPlace.id,
-                  dbPlace.title,
-                  dbPlace.imageUri,
-                  dbPlace.address,
-                  {
-                    lat: dbPlace.lat,
-                    lng: dbPlace.lng,
-                  }
-                )
-              );
+              places.push(Place.fromDbEntity(dbPlace));
             }
             resolve(places);
           },
@@ -92,27 +81,12 @@ export function fetchPlace(id: number): Promise<Place | SQLite.SQLError> {
           "SELECT * FROM places WHERE id=?",
           [id],
           (_, result) => {
-            const place = result.rows._array[0];
-            if (!place) {
+            const dbPlace = result.rows._array[0];
+            if (!dbPlace) {
               reject(new Error("Place not found in DB"));
             }
             // simulate delay fetching
-            setTimeout(
-              () =>
-                resolve(
-                  new Place(
-                    place.id,
-                    place.title,
-                    place.imageUri,
-                    place.address,
-                    {
-                      lat: place.lat,
-                      lng: place.lng,
-                    }
-                  )
-                ),
-              2000
-            );
+            setTimeout(() => resolve(Place.fromDbEntity(dbPlace)), 2000);
           },
           (_, error) => reject(error)
         );

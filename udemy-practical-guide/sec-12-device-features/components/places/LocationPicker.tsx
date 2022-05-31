@@ -6,7 +6,7 @@ import { PermissionStatus } from "expo-image-picker";
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { OutlinedButton } from "../UI/OutlinedButton";
-import { getAddress, getMapPreview, Location } from "../../util/location";
+import { getAddress, getMapPreview } from "../../util/location";
 import { useState } from "react";
 import {
   useIsFocused,
@@ -14,13 +14,14 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { useEffect } from "react";
+import { LatLng } from "react-native-maps";
 
 interface Props {
-  onPickLocation: (location: Location, address: string) => void;
+  onPickLocation: (location: LatLng, address: string) => void;
 }
 
 export function LocationPicker({ onPickLocation }: Props) {
-  const [location, setLocation] = useState<Location>();
+  const [location, setLocation] = useState<LatLng>();
   const [locationPermStatus, requestPermission] = useForegroundPermissions();
   const navigation = useNavigation<any>();
   const isFocussed = useIsFocused(); // !!! IMPORTANT
@@ -28,8 +29,8 @@ export function LocationPicker({ onPickLocation }: Props) {
 
   useEffect(() => {
     if (isFocussed && route.params) {
-      const { latitude: lat, longitude: lng } = route.params.pickedLocation;
-      setLocation({ lat, lng });
+      const { latitude, longitude } = route.params.pickedLocation;
+      setLocation({ latitude, longitude });
     }
   }, [route, isFocussed]);
 
@@ -65,10 +66,10 @@ export function LocationPicker({ onPickLocation }: Props) {
     if (!hasPerm) {
       return;
     }
-    const location = await getCurrentPositionAsync({ accuracy: 1 });
+    const location = await getCurrentPositionAsync({ accuracy: 3 });
     setLocation({
-      lat: location.coords.latitude,
-      lng: location.coords.longitude,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     });
   }
 

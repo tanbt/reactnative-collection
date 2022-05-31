@@ -13,7 +13,7 @@ export function AddPlace({ navigation }: any) {
       }
       navigation.navigate("AllPlaces");
     } catch (err) {
-      Alert.alert("Error", "Failed to save the new place.");
+      Alert.alert("Error", "Failed to save the new place. " + err);
     }
   }
 
