@@ -96,11 +96,22 @@ export function fetchPlace(id: number): Promise<Place | SQLite.SQLError> {
             if (!place) {
               reject(new Error("Place not found in DB"));
             }
-            resolve(
-              new Place(place.id, place.title, place.imageUri, place.address, {
-                lat: place.lat,
-                lng: place.lng,
-              })
+            // simulate delay fetching
+            setTimeout(
+              () =>
+                resolve(
+                  new Place(
+                    place.id,
+                    place.title,
+                    place.imageUri,
+                    place.address,
+                    {
+                      lat: place.lat,
+                      lng: place.lng,
+                    }
+                  )
+                ),
+              2000
             );
           },
           (_, error) => reject(error)

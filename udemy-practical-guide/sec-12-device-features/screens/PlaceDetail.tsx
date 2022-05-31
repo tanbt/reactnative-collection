@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { LatLng } from "react-native-maps";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 import { OutlinedButton } from "../components/UI/OutlinedButton";
 import { Colors } from "../constants/Colors";
 import { Place } from "../models/place";
 import { fetchPlace } from "../util/database";
 
 export function PlaceDetail({ navigation, route }: any) {
+  const [isFetching, setIsFetching] = useState<boolean>(true);
   const [place, setPlace] = useState<Place>();
   const placeId = route?.params.placeId || null;
 
   useEffect(() => {
+    setIsFetching(true);
     async function loadPlace() {
       try {
         // add loading indicator and fallback view
         const place = (await fetchPlace(placeId)) as Place;
+        setIsFetching(false);
         setPlace(place);
       } catch (err) {
         Alert.alert("Error", "Failed to get the place details");
@@ -33,6 +37,10 @@ export function PlaceDetail({ navigation, route }: any) {
       location: curLocation,
       address: place?.title ?? place?.address,
     });
+  }
+
+  if (isFetching) {
+    return <LoadingOverlay message="Loading place details ..." />;
   }
 
   return (
