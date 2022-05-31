@@ -86,12 +86,26 @@ export function fetchPlace(id: number): Promise<Place | SQLite.SQLError> {
               reject(new Error("Place not found in DB"));
             }
             // simulate delay fetching
-            setTimeout(() => resolve(Place.fromDbEntity(dbPlace)), 2000);
+            setTimeout(() => resolve(Place.fromDbEntity(dbPlace)), 1000);
           },
           (_, error) => reject(error)
         );
       });
     }
   );
+  return promise;
+}
+
+export function deletePlace(id: number): Promise<boolean | SQLite.SQLError> {
+  const promise = new Promise<boolean>((resolve: any, reject: any) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM places WHERE id=?`,
+        [id],
+        () => setTimeout(() => resolve(true), 500),
+        (_, error) => reject(error)
+      );
+    });
+  });
   return promise;
 }

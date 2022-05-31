@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { LatLng } from "react-native-maps";
+import { IconButton } from "../components/UI/IconButton";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import { OutlinedButton } from "../components/UI/OutlinedButton";
 import { Colors } from "../constants/Colors";
 import { Place } from "../models/place";
-import { fetchPlace } from "../util/database";
+import { deletePlace, fetchPlace } from "../util/database";
 
 export function PlaceDetail({ navigation, route }: any) {
   const [isFetching, setIsFetching] = useState<boolean>(true);
@@ -39,8 +40,20 @@ export function PlaceDetail({ navigation, route }: any) {
     });
   }
 
+  async function handleDelete() {
+    setIsFetching(true);
+
+    try {
+      await deletePlace(placeId);
+      navigation.navigate("AllPlaces");
+    } catch (err) {
+      Alert.alert("Error", "Cannot remove the place. " + err);
+      setIsFetching(false);
+    }
+  }
+
   if (isFetching) {
-    return <LoadingOverlay message="Loading place details ..." />;
+    return <LoadingOverlay message="Processing the place..." />;
   }
 
   return (
@@ -54,6 +67,12 @@ export function PlaceDetail({ navigation, route }: any) {
           <OutlinedButton icon="map" onPress={viewOnMapHandler}>
             View on Map
           </OutlinedButton>
+          <IconButton
+            icon="ios-trash-bin"
+            size={28}
+            color={Colors.red300}
+            onPress={handleDelete}
+          />
         </View>
       </View>
     </ScrollView>
