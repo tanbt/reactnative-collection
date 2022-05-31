@@ -83,3 +83,30 @@ export function fetchPlaces(): Promise<Place[] | SQLite.SQLError> {
   );
   return promise;
 }
+
+export function fetchPlace(id: number): Promise<Place | SQLite.SQLError> {
+  const promise = new Promise<Place | SQLite.SQLError>(
+    (resolve: any, reject: any) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM places WHERE id=?",
+          [id],
+          (_, result) => {
+            const place = result.rows._array[0];
+            if (!place) {
+              reject(new Error("Place not found in DB"));
+            }
+            resolve(
+              new Place(place.id, place.title, place.imageUri, place.address, {
+                lat: place.lat,
+                lng: place.lng,
+              })
+            );
+          },
+          (_, error) => reject(error)
+        );
+      });
+    }
+  );
+  return promise;
+}
