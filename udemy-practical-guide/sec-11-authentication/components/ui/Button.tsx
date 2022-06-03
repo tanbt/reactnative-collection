@@ -4,11 +4,12 @@ import { Colors } from "../../constants/styles";
 interface Props {
   children: string;
   onPress: () => void;
+  style?: any;
 }
-function Button({ children, onPress }: Props) {
+function Button({ children, onPress, style }: Props) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.button, pressed && styles.pressed, style]}
       onPress={onPress}
     >
       <View>

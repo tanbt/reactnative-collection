@@ -8,6 +8,18 @@ export enum AuthMode {
   SignUp = "signUp",
 }
 
+async function sendEmailVerifycation(token: string) {
+  console.log({ authtoken: token });
+  return axios.post(
+    `${BASE_URL}/accounts:sendOobCode?key=${API_KEY}`,
+    {
+      requestType: "VERIFY_EMAIL",
+      idToken: token,
+    },
+    { headers: { "content-type": "application/json" } }
+  );
+}
+
 async function authenticate(
   mode: AuthMode,
   email: string,
@@ -21,6 +33,11 @@ async function authenticate(
       returnSecureToken: true,
     }
   );
+  // With the idToken, the user can login already.
+  // If we want to disable the user until verified, try `firebase` module
+  if (mode === AuthMode.SignUp) {
+    await sendEmailVerifycation(response.data.idToken);
+  }
   return response.data.idToken;
 }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Colors } from "../../constants/styles";
 
 import Button from "../ui/Button";
 import Input from "./Input";
@@ -56,8 +57,16 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }: Props) {
     });
   }
 
+  function googleLoginHandler() {
+    // https://github.com/react-native-google-signin/google-signin
+    console.log(
+      `Pretty complex. Considering having a built-in browser to do the authentication (for Web)
+      which can forward the token to app.`
+    );
+  }
+
   return (
-    <View style={styles.form}>
+    <View>
       <View>
         <Input
           label="Email Address"
@@ -99,6 +108,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }: Props) {
           <Button onPress={submitHandler}>
             {isLogin ? "Log In" : "Sign Up"}
           </Button>
+          <Button style={styles.googleButton} onPress={googleLoginHandler}>
+            Google Log In
+          </Button>
         </View>
       </View>
     </View>
@@ -111,5 +123,8 @@ const styles = StyleSheet.create({
   buttons: {
     marginTop: 12,
   },
-  form: {},
+  googleButton: {
+    backgroundColor: Colors.secondary800,
+    marginTop: 16,
+  },
 });

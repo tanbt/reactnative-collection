@@ -37,6 +37,10 @@ function AuthContent({ isLogin, onAuthenticate }: Props) {
     }
   }
 
+  function forgotPasswordHandler() {
+    // todo
+  }
+
   function submitHandler(credentials: Credential) {
     let { email, confirmEmail, password, confirmPassword } = credentials;
 
@@ -73,6 +77,9 @@ function AuthContent({ isLogin, onAuthenticate }: Props) {
         credentialsInvalid={credentialsInvalid}
       />
       <View style={styles.buttons}>
+        <FlatButton onPress={forgotPasswordHandler}>
+          Forgot password?
+        </FlatButton>
         <FlatButton onPress={switchAuthModeHandler}>
           {isLogin ? "Create a new user" : "Log in instead"}
         </FlatButton>
