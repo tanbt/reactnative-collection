@@ -1,15 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import LottieView from "lottie-react-native";
 
 export default function LottieBackground() {
   const [name, setName] = useState<string>("");
+  const animation = useRef<any>(null);
+  useEffect(() => {
+    setTimeout(() => {
+      animation.current?.play();
+    }, 1000);
+  }, []);
+
   return (
     <SafeAreaView>
       <View style={styles.content}>
@@ -21,7 +22,7 @@ export default function LottieBackground() {
         {!!name && <Text>Hello, {name}!</Text>}
       </View>
       <LottieView
-        autoPlay
+        ref={animation}
         style={styles.lottieView}
         source={require("./assets/PoliteChicky.json")}
       />

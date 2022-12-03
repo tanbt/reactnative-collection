@@ -5,14 +5,14 @@ import LottieView from "lottie-react-native";
 export default function LottieAnimation() {
   const animation = useRef<any>(null);
   useEffect(() => {
-    // You can control the ref programmatically, rather than using autoPlay
-    // animation.current?.play();
+    setTimeout(() => {
+      animation.current?.play();
+    }, 1000);
   }, []);
 
   return (
     <View style={styles.animationContainer}>
       <LottieView
-        autoPlay
         ref={animation}
         style={{
           width: 200,
