@@ -2,7 +2,11 @@ import React, { useRef, useEffect } from "react";
 import { Button, StyleSheet, View } from "react-native";
 import LottieView from "lottie-react-native";
 
-export default function LottieAnimation() {
+interface Props {
+  src: any;
+}
+
+export default function LottieAnimation({ src }: Props) {
   const animation = useRef<any>(null);
   useEffect(() => {
     setTimeout(() => {
@@ -20,7 +24,7 @@ export default function LottieAnimation() {
           backgroundColor: "#eee",
         }}
         // Find more Lottie files at https://lottiefiles.com/featured
-        source={require("./assets/PoliteChicky.json")}
+        source={src}
       />
       <View style={styles.buttonContainer}>
         <Button
