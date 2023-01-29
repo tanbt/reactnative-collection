@@ -3,8 +3,11 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { setupCache } from "axios-cache-interceptor";
-const axios = setupCache(Axios);
 
+// In memory cache
+const axios = setupCache(Axios, {
+  ttl: 1 * 60 * 1000, // 1m
+});
 export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>();

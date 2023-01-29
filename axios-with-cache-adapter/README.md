@@ -7,4 +7,5 @@ See https://axios-cache-interceptor.js.org/guide
 
 Simple and works as expected. Some [configs](https://axios-cache-interceptor.js.org/config):
 
--
+- ttl
+- [storage](https://axios-cache-interceptor.js.org/config#storage): default is `buildMemoryStorage`, can be customized with any `set,get,remove`
