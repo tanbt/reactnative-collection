@@ -3,11 +3,16 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { setupCache } from "axios-cache-interceptor";
+import { customStorage } from "./CustomStorage";
+import { clearLocalData } from "./CustomLocalStorage";
 
 // In memory cache
-const axios = setupCache(Axios, {
-  ttl: 1 * 60 * 1000, // 1m
-});
+// const axios = setupCache(Axios, {
+//   ttl: 1 * 60 * 1000, // 1m
+// });
+
+const axios = setupCache(Axios, { storage: customStorage });
+
 export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>();
@@ -35,6 +40,7 @@ export default function App() {
       />
 
       <Button title="Reset" onPress={() => setData(null)} />
+      <Button title="Clear cache" onPress={() => clearLocalData()} />
     </View>
   );
 }
