@@ -1,18 +1,25 @@
-import axios from "axios";
+import Axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { setupCache } from "axios-cache-interceptor";
+const axios = setupCache(Axios);
 
 export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>();
+
   async function handleFetch() {
     setIsLoading(true);
-    const res = await axios.get(
-      "http://localhost:3000/public/getKamupakPoints/"
-    );
-    setData(res.data.points.length);
-    setIsLoading(false);
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/public/getKamupakPoints/"
+      );
+      setData(res.data.points.length);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
@@ -23,6 +30,7 @@ export default function App() {
         title={isLoading ? "Fetching..." : "Fetch"}
         onPress={handleFetch}
       />
+
       <Button title="Reset" onPress={() => setData(null)} />
     </View>
   );
