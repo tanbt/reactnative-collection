@@ -13,10 +13,12 @@
     "axios": "1",
     "axios-cache-interceptor": "1",
     "expo": "~47.0.12",
+    "expo-blur": "~12.0.1",
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-expo-image-cache": "^4.1.0",
     "react-native-web": "~0.18.9"
   },
   "devDependencies": {
