@@ -9,6 +9,7 @@ import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Constants from "expo-constants";
 import i18n from "i18next";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, View } from "react-native";
@@ -18,6 +19,8 @@ import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Circle, Path } from "react-native-svg";
 import { WebView } from "react-native-webview";
+
+import { Audio, ResizeMode, Video } from "expo-av";
 
 const EyeIcon = ({
   visible,
@@ -71,6 +74,10 @@ export default function TestingScreen() {
   const t = useDefaultTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [text, setText] = useState("some text");
+  const projectId =
+    Constants?.expoConfig?.extra?.eas?.projectId ??
+    Constants?.easConfig?.projectId;
+  console.log("Project id: ", projectId);
 
   // Use React Query's useQuery hook
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
@@ -85,6 +92,11 @@ export default function TestingScreen() {
       await AsyncStorage.setItem("language", "en");
     };
     storeLanguage();
+
+    const loadAudio = async () => {
+      await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+    };
+    loadAudio();
 
     console.log("Is system language Vietnamese?", isVietnamese());
   }, []);
@@ -142,6 +154,13 @@ export default function TestingScreen() {
               onChangeText={(text) => setText(text)}
             />
           </KeyboardAwareScrollView>
+
+          <Video
+            source={{ uri: "" }}
+            useNativeControls={false}
+            resizeMode={ResizeMode.COVER}
+            shouldPlay={false}
+          />
 
           <View style={{ marginTop: 20 }}>
             <ThemedText style={{ fontWeight: "bold", marginBottom: 10 }}>
