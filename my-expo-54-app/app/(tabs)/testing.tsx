@@ -1,11 +1,16 @@
 import CoinIcon from "@/assets/icons/coin-01.svg";
+import CarouselDemo from "@/components/carousel-demo";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { isVietnamese } from "@/util/locales";
+import { useDefaultTranslation } from "@/util/locales/hook";
+import { en } from "@/util/locales/translate/en";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import i18n from "i18next";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -50,16 +55,17 @@ const fetchGooglePage = async () => {
 
   // Log various properties
   console.log("✅ Request successful!");
-  console.log("Status Code:", response.status);
-  console.log("Status Text:", response.statusText);
-  console.log("Content-Type:", response.headers["content-type"]);
-  console.log("Response Data Length:", response.data.length, "characters");
-  console.log("First 200 characters:", response.data.substring(0, 200));
+  // console.log("Status Code:", response.status);
+  // console.log("Status Text:", response.statusText);
+  // console.log("Content-Type:", response.headers["content-type"]);
+  // console.log("Response Data Length:", response.data.length, "characters");
+  // console.log("First 200 characters:", response.data.substring(0, 200));
 
   return response.data;
 };
 
 export default function TestingScreen() {
+  const t = useDefaultTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState();
 
   // Use React Query's useQuery hook
@@ -75,6 +81,8 @@ export default function TestingScreen() {
       await AsyncStorage.setItem("language", "en");
     };
     storeLanguage();
+
+    console.log("Is system language Vietnamese?", isVietnamese());
   }, []);
 
   // Log errors if they occur
@@ -86,12 +94,18 @@ export default function TestingScreen() {
     }
   }
 
+  const chooseLang = async (lang: any) => {
+    setSelectedLanguage(lang);
+    await AsyncStorage.setItem("language", lang);
+    i18n.changeLanguage(lang);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#00aaaa" }}>
       <ThemedView style={{ padding: 20 }}>
         <CoinIcon width={20} height={20} />
         <ThemedText style={{ marginVertical: 10 }}>
-          This is the testing screen.
+          This is the testing screen. {t(en.home)}
         </ThemedText>
         <EyeIcon visible={true} strokeColor="blue" />
 
@@ -105,13 +119,13 @@ export default function TestingScreen() {
 
         <Picker
           selectedValue={selectedLanguage}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
-          }
+          onValueChange={(itemValue) => chooseLang(itemValue)}
         >
           <Picker.Item label="English" value="en" />
           <Picker.Item label="Vietnamese" value="vi" />
         </Picker>
+
+        <CarouselDemo />
 
         <View style={{ marginTop: 20 }}>
           <ThemedText style={{ fontWeight: "bold", marginBottom: 10 }}>
@@ -139,10 +153,6 @@ export default function TestingScreen() {
             onPress={() => refetch()}
             disabled={isFetching}
           />
-
-          <ThemedText style={{ marginTop: 15, fontSize: 12, opacity: 0.7 }}>
-            Check the console/logs for detailed output
-          </ThemedText>
 
           <ThemedText style={{ marginTop: 10, fontSize: 11, opacity: 0.6 }}>
             React Query handles caching, refetching, and state management
