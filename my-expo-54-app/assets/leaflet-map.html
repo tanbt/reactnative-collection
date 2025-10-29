@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VINA Salon Map</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+    #map {
+      height: 100%;
+      width: 100%;
+      background-color: #e8ecf0;
+    }
+    .salon-popup {
+      text-align: center;
+    }
+    .salon-name {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    .salon-address {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .salon-rating {
+      margin-bottom: 10px;
+    }
+    .directions-btn {
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .star {
+      color: gold;
+    }
+    .cluster-icon {
+      background-color: rgba(255, 64, 129, 0.8);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .marker-label {
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid #FF4081;
+      border-radius: 3px;
+      color: #333;
+      font-size: 10px;
+      padding: 1px 4px;
+      white-space: nowrap;
+      text-align: center;
+      pointer-events: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .leaflet-control-attribution {
+      font-size: 8px !important;
+      opacity: 0.4;
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background-color: rgba(255,255,255,0.7) !important;
+    }
+    
+    /* Android marker styles */
+    .android-marker {
+      background-color: #FF4081;
+      border: 2px solid white;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    
+    .android-marker::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 6px solid #FF4081;
+    }
+    
+    /* Android salon name label */
+    .android-salon-label {
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1px solid #FF4081;
+      border-radius: 4px;
+      color: #333;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 6px;
+      white-space: nowrap;
+      text-align: center;
+      pointer-events: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  
+  <!-- Load Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Load MarkerCluster JS -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  
+  <script>
+    // Global variables
+    let map;
+    let markers;
+    let salons = [];
+    let markerCache = new Map();
+    let isMapInitialized = false;
+    
+    // Initialize the map
+    function initializeMap() {
+      if (isMapInitialized) {
+        console.log('Map already initialized');
+        return;
+      }
+      
+      try {
+        console.log('Starting map initialization...');
+        
+        map = L.map('map', {
+          zoomControl: true,
+          tap: true,
+          touchZoom: true,
+          maxZoom: 19,
+          minZoom: 3,
+          preferCanvas: true
+        }).setView([60.17, 24.94], 12);
+        
+        console.log('Map object created');
+        
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '© OpenStreetMap'
+        }).addTo(map);
+        
+        console.log('Tile layer added');
+        
+        // Initialize marker cluster group
+        markers = L.markerClusterGroup({
+          maxClusterRadius: 60,
+          spiderfyOnMaxZoom: false,
+          showCoverageOnHover: false,
+          zoomToBoundsOnClick: true,
+          disableClusteringAtZoom: 17,
+          iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let size = Math.min(70, Math.max(40, count / 2 + 40));
+            
+            return L.divIcon({
+              html: '<div><span>' + count + '</span></div>',
+              className: 'cluster-icon',
+              iconSize: [size, size]
+            });
+          }
+        });
+        
+        map.addLayer(markers);
+        console.log('Marker cluster added');
+        
+        isMapInitialized = true;
+        
+        console.log('Map initialization completed successfully');
+        
+        // Send mapReady event
+        if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'mapReady' }));
+        }
+        
+      } catch (error) {
+        console.error('ERROR initializing map: ' + error.message);
+      }
+    }
+    
+    // Create marker function
+    function createMarker(salon) {
+      if (markerCache.has(salon.id)) {
+        return markerCache.get(salon.id);
+      }
+      
+      let marker;
+      let labelMarker = null;
+      
+      // Platform-specific marker creation
+      const isAndroid = navigator.userAgent.indexOf('Android') > -1;
+      
+      if (isAndroid) {
+        // Android: Use custom divIcon
+        const androidIcon = L.divIcon({
+          className: 'android-marker',
+          html: '',
+          iconSize: [16, 22],
+          iconAnchor: [8, 22],
+          popupAnchor: [0, -22]
+        });
+        
+        marker = L.marker([salon.lat, salon.lng], {
+          icon: androidIcon
+        });
+        
+        // Create salon name label for Android
+        const labelIcon = L.divIcon({
+          className: 'android-salon-label',
+          html: salon.name,
+          iconSize: [null, null],
+          iconAnchor: [60, -5]
+        });
+        
+        labelMarker = L.marker([salon.lat, salon.lng], {
+          icon: labelIcon,
+          interactive: false,
+          zIndexOffset: -100
+        });
+      } else {
+        // iOS: Use default Leaflet marker
+        marker = L.marker([salon.lat, salon.lng]);
+      }
+      
+      // Create popup content
+      const popupContent = `
+        <div class="salon-popup">
+          <div class="salon-name">${salon.name}</div>
+          <div class="salon-address">${salon.address}</div>
+          ${salon.rating ? '<div class="salon-rating">★ ' + salon.rating + '</div>' : ''}
+          <button class="directions-btn" onclick="getDirections(${salon.lat}, ${salon.lng})">
+            Get Directions
+          </button>
+        </div>
+      `;
+      
+      marker.bindPopup(popupContent);
+      
+      // Cache the markers
+      const markerData = {
+        marker: marker,
+        labelMarker: labelMarker,
+        salon: salon
+      };
+      
+      markerCache.set(salon.id, markerData);
+      
+      return markerData;
+    }
+    
+    // Update map with salons
+    function updateMap(salonsData) {
+      if (!map || !markers) {
+        console.log('ERROR: Map not initialized, cannot update');
+        return;
+      }
+      
+      try {
+        console.log('Updating map with ' + salonsData.length + ' salons');
+        salons = salonsData;
+        
+        // Clear existing markers
+        markers.clearLayers();
+        markerCache.clear();
+        
+        // Add new markers
+        let addedCount = 0;
+        salons.forEach(salon => {
+          const markerData = createMarker(salon);
+          if (markerData && markerData.marker) {
+            markers.addLayer(markerData.marker);
+            
+            // Add label marker for Android
+            if (markerData.labelMarker) {
+              markerData.labelMarker.addTo(map);
+            }
+            
+            addedCount++;
+          }
+        });
+        
+        console.log('Successfully added ' + addedCount + ' markers to map');
+        
+        // Handle zoom events
+        map.on('zoomend', handleZoomChange);
+        map.on('moveend', handleZoomChange);
+        
+        handleZoomChange();
+        
+      } catch (error) {
+        console.log('ERROR updating map: ' + error.message);
+      }
+    }
+    
+    // Handle zoom changes
+    function handleZoomChange() {
+      const zoom = map.getZoom();
+      const bounds = map.getBounds();
+      const shouldShowLabels = zoom >= 15;
+      
+      markerCache.forEach((markerData, salonId) => {
+        if (markerData.labelMarker) {
+          const isInBounds = bounds.contains([markerData.salon.lat, markerData.salon.lng]);
+          
+          if (shouldShowLabels && isInBounds) {
+            const isInCluster = markers.getVisibleParent(markerData.marker) !== markerData.marker;
+            
+            if (!isInCluster && !map.hasLayer(markerData.labelMarker)) {
+              markerData.labelMarker.addTo(map);
+            } else if (isInCluster && map.hasLayer(markerData.labelMarker)) {
+              map.removeLayer(markerData.labelMarker);
+            }
+          } else if (map.hasLayer(markerData.labelMarker)) {
+            map.removeLayer(markerData.labelMarker);
+          }
+        }
+      });
+    }
+    
+    // Get directions function
+    function getDirections(lat, lng) {
+      try {
+        const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+        if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'openUrl', url }));
+        }
+      } catch (error) {
+        console.log('ERROR getting directions: ' + error.message);
+      }
+    }
+    
+    // Handle messages from React Native
+    function handleMessage(event) {
+      try {
+        let data = event.data;
+        if (typeof data === 'string') {
+          data = JSON.parse(data);
+        }
+        
+        if (data.type === 'updateSalons') {
+          updateMap(data.data);
+        }
+      } catch (error) {
+        console.log('ERROR handling message: ' + error.message);
+      }
+    }
+    
+    // Message listeners
+    window.addEventListener('message', handleMessage);
+    document.addEventListener('message', handleMessage);
+    
+    if (window.ReactNativeWebView) {
+      window.addEventListener('message', handleMessage);
+    }
+    
+    // Initialize when ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeMap);
+    } else {
+      initializeMap();
+    }
+    
+  </script>
+</body>
+</html>
