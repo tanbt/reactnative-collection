@@ -1,8 +1,12 @@
 import CoinIcon from "@/assets/icons/coin-01.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Slider from "@react-native-community/slider";
+import { Picker } from "@react-native-picker/picker";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Circle, Path } from "react-native-svg";
@@ -41,9 +45,9 @@ const EyeIcon = ({
 // Fetch function for React Query
 const fetchGooglePage = async () => {
   console.log("Starting request to google.com...");
-  
+
   const response = await axios.get("https://www.google.com");
-  
+
   // Log various properties
   console.log("✅ Request successful!");
   console.log("Status Code:", response.status);
@@ -51,18 +55,27 @@ const fetchGooglePage = async () => {
   console.log("Content-Type:", response.headers["content-type"]);
   console.log("Response Data Length:", response.data.length, "characters");
   console.log("First 200 characters:", response.data.substring(0, 200));
-  
+
   return response.data;
 };
 
 export default function TestingScreen() {
+  const [selectedLanguage, setSelectedLanguage] = useState();
+
   // Use React Query's useQuery hook
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ['googlePage'],
+    queryKey: ["googlePage"],
     queryFn: fetchGooglePage,
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
+  useEffect(() => {
+    const storeLanguage = async () => {
+      await AsyncStorage.setItem("language", "en");
+    };
+    storeLanguage();
+  }, []);
 
   // Log errors if they occur
   if (isError) {
@@ -81,6 +94,24 @@ export default function TestingScreen() {
           This is the testing screen.
         </ThemedText>
         <EyeIcon visible={true} strokeColor="blue" />
+
+        <Slider
+          style={{ width: 200, height: 40 }}
+          minimumValue={0}
+          maximumValue={1}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#000000"
+        />
+
+        <Picker
+          selectedValue={selectedLanguage}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedLanguage(itemValue)
+          }
+        >
+          <Picker.Item label="English" value="en" />
+          <Picker.Item label="Vietnamese" value="vi" />
+        </Picker>
 
         <View style={{ marginTop: 20 }}>
           <ThemedText style={{ fontWeight: "bold", marginBottom: 10 }}>
@@ -114,7 +145,8 @@ export default function TestingScreen() {
           </ThemedText>
 
           <ThemedText style={{ marginTop: 10, fontSize: 11, opacity: 0.6 }}>
-            React Query handles caching, refetching, and state management automatically!
+            React Query handles caching, refetching, and state management
+            automatically!
           </ThemedText>
         </View>
       </ThemedView>
