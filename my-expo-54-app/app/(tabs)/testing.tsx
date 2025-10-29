@@ -16,6 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Circle, Path } from "react-native-svg";
+import { WebView } from "react-native-webview";
 
 const EyeIcon = ({
   visible,
@@ -171,6 +172,19 @@ export default function TestingScreen() {
             React Query handles caching, refetching, and state management
             automatically!
           </ThemedText>
+        </View>
+        <View
+          style={{
+            width: 400,
+            height: 500,
+            marginTop: 20,
+            backgroundColor: "white",
+          }}
+        >
+          <WebView
+            source={{ uri: "https://reactnative.dev/" }}
+            style={{ width: "100%", height: 500, marginTop: 20 }}
+          />
         </View>
       </ThemedView>
     </SafeAreaView>
