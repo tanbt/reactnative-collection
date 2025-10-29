@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Constants from "expo-constants";
 import i18n from "i18next";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Button, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -23,6 +23,9 @@ import { WebView } from "react-native-webview";
 import { Audio, ResizeMode, Video } from "expo-av";
 import * as Device from "expo-device";
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
+
+import * as Notifications from "expo-notifications";
 
 const EyeIcon = ({
   visible,
@@ -74,6 +77,11 @@ const fetchGooglePage = async () => {
 
 export default function TestingScreen() {
   const t = useDefaultTranslation();
+  const [notification, setNotification] = useState<
+    Notifications.Notification | undefined
+  >(undefined);
+  const notificationListener = useRef<Notifications.EventSubscription>(null);
+
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [text, setText] = useState("some text");
   const projectId =
@@ -101,6 +109,31 @@ export default function TestingScreen() {
       await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
     };
     loadAudio();
+
+    const pickImage = async () => {
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+      await ImagePicker.launchImageLibraryAsync();
+    };
+    pickImage();
+
+    const notificationSetup = async () => {
+      const settings = await Notifications.getPermissionsAsync();
+      if (
+        settings.granted ||
+        settings.ios?.status ===
+          Notifications.IosAuthorizationStatus.PROVISIONAL
+      ) {
+        console.log("Notification permissions granted.");
+        notificationListener.current =
+          Notifications.addNotificationReceivedListener((notification) => {
+            setNotification(notification);
+          });
+      } else {
+        console.log("Requesting notification permissions...");
+        const newSettings = await Notifications.requestPermissionsAsync();
+      }
+    };
+    notificationSetup();
 
     console.log("Is system language Vietnamese?", isVietnamese());
   }, []);
