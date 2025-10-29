@@ -1,5 +1,4 @@
 import CoinIcon from "@/assets/icons/coin-01.svg";
-import CarouselDemo from "@/components/carousel-demo";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { isVietnamese } from "@/util/locales";
@@ -13,6 +12,8 @@ import axios from "axios";
 import i18n from "i18next";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Circle, Path } from "react-native-svg";
 
@@ -67,6 +68,7 @@ const fetchGooglePage = async () => {
 export default function TestingScreen() {
   const t = useDefaultTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState();
+  const [text, setText] = useState("some text");
 
   // Use React Query's useQuery hook
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
@@ -125,7 +127,18 @@ export default function TestingScreen() {
           <Picker.Item label="Vietnamese" value="vi" />
         </Picker>
 
-        <CarouselDemo />
+        <KeyboardAwareScrollView
+          style={{ backgroundColor: "#aaaa00" }}
+          extraScrollHeight={20}
+          enableOnAndroid={true}
+          keyboardShouldPersistTaps="handled"
+        >
+          <TextInput
+            label="Email"
+            value={text}
+            onChangeText={(text) => setText(text)}
+          />
+        </KeyboardAwareScrollView>
 
         <View style={{ marginTop: 20 }}>
           <ThemedText style={{ fontWeight: "bold", marginBottom: 10 }}>
