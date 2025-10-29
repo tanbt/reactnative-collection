@@ -21,6 +21,8 @@ import Svg, { Circle, Path } from "react-native-svg";
 import { WebView } from "react-native-webview";
 
 import { Audio, ResizeMode, Video } from "expo-av";
+import * as Device from "expo-device";
+import * as DocumentPicker from "expo-document-picker";
 
 const EyeIcon = ({
   visible,
@@ -78,6 +80,7 @@ export default function TestingScreen() {
     Constants?.expoConfig?.extra?.eas?.projectId ??
     Constants?.easConfig?.projectId;
   console.log("Project id: ", projectId);
+  console.log("Is device: ", Device.isDevice);
 
   // Use React Query's useQuery hook
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
@@ -94,6 +97,7 @@ export default function TestingScreen() {
     storeLanguage();
 
     const loadAudio = async () => {
+      await DocumentPicker.getDocumentAsync({ type: "audio/*" });
       await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
     };
     loadAudio();
