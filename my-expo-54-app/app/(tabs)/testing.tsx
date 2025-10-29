@@ -12,6 +12,7 @@ import axios from "axios";
 import i18n from "i18next";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -105,88 +106,91 @@ export default function TestingScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#00aaaa" }}>
-      <ThemedView style={{ padding: 20 }}>
-        <CoinIcon width={20} height={20} />
-        <ThemedText style={{ marginVertical: 10 }}>
-          This is the testing screen. {t(en.home)}
-        </ThemedText>
-        <EyeIcon visible={true} strokeColor="blue" />
-
-        <Slider
-          style={{ width: 200, height: 40 }}
-          minimumValue={0}
-          maximumValue={1}
-          minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="#000000"
-        />
-
-        <Picker
-          selectedValue={selectedLanguage}
-          onValueChange={(itemValue) => chooseLang(itemValue)}
-        >
-          <Picker.Item label="English" value="en" />
-          <Picker.Item label="Vietnamese" value="vi" />
-        </Picker>
-
-        <KeyboardAwareScrollView
-          style={{ backgroundColor: "#aaaa00" }}
-          extraScrollHeight={20}
-          enableOnAndroid={true}
-          keyboardShouldPersistTaps="handled"
-        >
-          <TextInput
-            label="Email"
-            value={text}
-            onChangeText={(text) => setText(text)}
-          />
-        </KeyboardAwareScrollView>
-
-        <View style={{ marginTop: 20 }}>
-          <ThemedText style={{ fontWeight: "bold", marginBottom: 10 }}>
-            React Query + Axios Request Example:
+      <GestureHandlerRootView>
+        <ThemedView style={{ padding: 20 }}>
+          <CoinIcon width={20} height={20} />
+          <ThemedText style={{ marginVertical: 10 }}>
+            This is the testing screen. {t(en.home)}
           </ThemedText>
+          <EyeIcon visible={true} strokeColor="blue" />
 
-          {(isLoading || isFetching) && (
-            <ActivityIndicator size="large" color="#0000ff" />
-          )}
-
-          {isError && (
-            <ThemedText style={{ marginVertical: 10, color: "red" }}>
-              Error: {error instanceof Error ? error.message : "Unknown error"}
-            </ThemedText>
-          )}
-
-          {data && !isError && (
-            <ThemedText style={{ marginVertical: 10, color: "green" }}>
-              ✅ Success! Data length: {data.length} characters
-            </ThemedText>
-          )}
-
-          <Button
-            title={isFetching ? "Fetching..." : "Refetch Google.com"}
-            onPress={() => refetch()}
-            disabled={isFetching}
+          <Slider
+            style={{ width: 200, height: 40 }}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
           />
 
-          <ThemedText style={{ marginTop: 10, fontSize: 11, opacity: 0.6 }}>
-            React Query handles caching, refetching, and state management
-            automatically!
-          </ThemedText>
-        </View>
-        <View
-          style={{
-            width: 400,
-            height: 500,
-            marginTop: 20,
-            backgroundColor: "white",
-          }}
-        >
-          <WebView
-            source={{ uri: "https://reactnative.dev/" }}
-            style={{ width: "100%", height: 500, marginTop: 20 }}
-          />
-        </View>
-      </ThemedView>
+          <Picker
+            selectedValue={selectedLanguage}
+            onValueChange={(itemValue) => chooseLang(itemValue)}
+          >
+            <Picker.Item label="English" value="en" />
+            <Picker.Item label="Vietnamese" value="vi" />
+          </Picker>
+
+          <KeyboardAwareScrollView
+            style={{ backgroundColor: "#aaaa00" }}
+            extraScrollHeight={20}
+            enableOnAndroid={true}
+            keyboardShouldPersistTaps="handled"
+          >
+            <TextInput
+              label="Email"
+              value={text}
+              onChangeText={(text) => setText(text)}
+            />
+          </KeyboardAwareScrollView>
+
+          <View style={{ marginTop: 20 }}>
+            <ThemedText style={{ fontWeight: "bold", marginBottom: 10 }}>
+              React Query + Axios Request Example:
+            </ThemedText>
+
+            {(isLoading || isFetching) && (
+              <ActivityIndicator size="large" color="#0000ff" />
+            )}
+
+            {isError && (
+              <ThemedText style={{ marginVertical: 10, color: "red" }}>
+                Error:{" "}
+                {error instanceof Error ? error.message : "Unknown error"}
+              </ThemedText>
+            )}
+
+            {data && !isError && (
+              <ThemedText style={{ marginVertical: 10, color: "green" }}>
+                ✅ Success! Data length: {data.length} characters
+              </ThemedText>
+            )}
+
+            <Button
+              title={isFetching ? "Fetching..." : "Refetch Google.com"}
+              onPress={() => refetch()}
+              disabled={isFetching}
+            />
+
+            <ThemedText style={{ marginTop: 10, fontSize: 11, opacity: 0.6 }}>
+              React Query handles caching, refetching, and state management
+              automatically!
+            </ThemedText>
+          </View>
+          <View
+            style={{
+              width: 400,
+              height: 500,
+              marginTop: 20,
+              backgroundColor: "white",
+            }}
+          >
+            <WebView
+              source={{ uri: "https://reactnative.dev/" }}
+              style={{ width: "100%", height: 500, marginTop: 20 }}
+            />
+          </View>
+        </ThemedView>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 }
