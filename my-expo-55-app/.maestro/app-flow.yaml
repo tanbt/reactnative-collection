@@ -1,0 +1,35 @@
+appId: com.vina-tan.my-expo-55-app
+---
+# E2E Test Flow for Expo SDK 55 App
+# This test validates the main app functionality
+
+- launchApp
+
+# Test Home Screen
+- assertVisible: "Welcome to Expo 55!"
+- assertVisible: "get started"
+- assertVisible: "Try editing"
+- assertVisible: "Dev tools"
+- assertVisible: "Fresh start"
+
+# Navigate to Explore tab
+- tapOn: "Explore"
+
+# Test Explore Screen
+- assertVisible: "Explore"
+- assertVisible: "This starter app includes example"
+- assertVisible: "Expo documentation"
+
+# Test collapsible sections
+- assertVisible: "File-based routing"
+- tapOn: "File-based routing"
+- assertVisible: "src/app/index.tsx"
+- assertVisible: "src/app/explore.tsx"
+
+# Test another collapsible section
+- tapOn: "Android, iOS, and web support"
+- assertVisible: "You can open this project on Android, iOS, and the web"
+
+# Navigate back to Home tab
+- tapOn: "Home"
+- assertVisible: "Welcome to Expo 55!"

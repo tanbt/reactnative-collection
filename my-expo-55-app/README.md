@@ -41,6 +41,59 @@ This command will move the starter code to the **app-example** directory and cre
 - If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
 - Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
 
+## End-to-End Testing with Maestro
+
+This project includes E2E tests using [Maestro](https://maestro.mobile.dev/), a simple and powerful mobile UI testing framework.
+
+### Prerequisites
+
+1. Install Maestro CLI:
+   ```bash
+   # macOS/Linux
+   curl -Ls "https://get.maestro.mobile.dev" | bash
+
+   # Windows (PowerShell)
+   iex "& { $(irm 'https://get.maestro.mobile.dev') }"
+   ```
+
+2. Ensure the Maestro CLI is in your PATH (the installer typically handles this).
+
+### Running E2E Tests
+
+1. Start your app in an emulator or simulator:
+   ```bash
+   # For Android
+   npm run android
+
+   # For iOS
+   npm run ios
+   ```
+
+2. In a separate terminal, run the E2E tests:
+   ```bash
+   npm run test:e2e
+   ```
+
+### Test Coverage
+
+The E2E test suite (`/.maestro/app-flow.yaml`) covers:
+- Home screen validation (Welcome message, hints)
+- Tab navigation between Home and Explore screens
+- Explore screen content verification
+- Collapsible sections interaction
+- Navigation flow testing
+
+### Adding New E2E Tests
+
+To add new test flows:
+1. Create a new `.yaml` file in the `.maestro` directory
+2. Use the Maestro test syntax (see [Maestro documentation](https://maestro.mobile.dev/reference/commands))
+3. Run your test with: `maestro test .maestro/your-test.yaml`
+
+### CI/CD Integration
+
+The E2E tests can be integrated into GitHub Actions or other CI/CD pipelines. Maestro supports cloud testing and can run on various platforms.
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
