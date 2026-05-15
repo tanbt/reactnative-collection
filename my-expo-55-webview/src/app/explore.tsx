@@ -46,7 +46,9 @@ export default function ExploreScreen() {
         domStorageEnabled
         source={myHtmlFile}
         onLoadEnd={handleLoadEnd}
-        onMessage={() => { }}
+        onMessage={(event) => {
+          alert(`This is a app native message. The app received event from WebView: ${event.nativeEvent.data}`);
+        }}
       />
     </SafeAreaView>
   );

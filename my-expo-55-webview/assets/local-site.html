@@ -98,7 +98,7 @@
         <form id="name-form">
             <label for="name">Name</label>
             <input id="name" name="name" type="text" placeholder="Enter your name" />
-            <button type="submit">Submit</button>
+            <button type="submit">Submit to native app</button>
             <button id="reload-local-storage" type="button">Reload localstorage</button>
             <button id="clear-local-storage" type="button">Clear localstorage</button>
         </form>
@@ -133,6 +133,8 @@
             event.preventDefault();
             const enteredName = nameInput.value.trim();
             jsContent.textContent = enteredName ? enteredName : 'Please enter a name.';
+            alert(`This is an alert webview! You entered: ${enteredName}. You will see app message soon.`);
+            window.ReactNativeWebView.postMessage(enteredName);
         });
 
         function isWebView() {
@@ -142,7 +144,7 @@
 
         const isRunOnWebView = document.getElementById('is-run-on-webview');
         if (isRunOnWebView) {
-            isRunOnWebView.textContent = isWebView() ? 'Running on WebView' :  JSON.stringify(navigator.userAgent || navigator.vendor);
+            isRunOnWebView.textContent = isWebView() ? 'Running on WebView' : JSON.stringify(navigator.userAgent || navigator.vendor);
         }
     </script>
 </body>
