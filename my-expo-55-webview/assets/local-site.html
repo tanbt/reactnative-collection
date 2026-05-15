@@ -76,6 +76,17 @@
             font-weight: 600;
             font-size: 0.95rem;
         }
+
+        button[type="button"] {
+            justify-self: start;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 
@@ -87,19 +98,49 @@
             <label for="name">Name</label>
             <input id="name" name="name" type="text" placeholder="Enter your name" />
             <button type="submit">Submit</button>
+            <button id="reload-local-storage" type="button">Reload localstorage</button>
+            <button id="clear-local-storage" type="button">Clear localstorage</button>
         </form>
         <div id="js-content"></div>
+        <div id="local-storage-content"></div>
     </main>
     <script>
         const form = document.getElementById('name-form');
         const nameInput = document.getElementById('name');
         const jsContent = document.getElementById('js-content');
+        const localStorageContent = document.getElementById('local-storage-content');
+        const reloadLocalStorageButton = document.getElementById('reload-local-storage');
+        const clearLocalStorageButton = document.getElementById('clear-local-storage');
+
+        function renderStoredName() {
+            const storedName = window.localStorage.getItem('rnName');
+            localStorageContent.textContent = storedName ? storedName : 'No stored rnName value found.';
+        }
+
+        renderStoredName();
+
+        reloadLocalStorageButton.addEventListener('click', function () {
+            renderStoredName();
+        });
+
+        clearLocalStorageButton.addEventListener('click', function () {
+            window.localStorage.removeItem('rnName');
+            renderStoredName();
+        });
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
             const enteredName = nameInput.value.trim();
             jsContent.textContent = enteredName ? enteredName : 'Please enter a name.';
+
+            if (enteredName) {
+                window.localStorage.setItem('webName', enteredName);
+            } else {
+                window.localStorage.removeItem('rnName');
+            }
+
+            renderStoredName();
         });
     </script>
 </body>

@@ -40,7 +40,7 @@ export default function HomeScreen() {
   };
 
   const webviewButton = () => {
-    router.push('/explore');
+    router.navigate({ pathname: '/explore', params: { name: nativeName.trim() } });
   };
 
   return (
