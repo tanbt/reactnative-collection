@@ -130,17 +130,8 @@
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-
             const enteredName = nameInput.value.trim();
             jsContent.textContent = enteredName ? enteredName : 'Please enter a name.';
-
-            if (enteredName) {
-                window.localStorage.setItem('webName', enteredName);
-            } else {
-                window.localStorage.removeItem('rnName');
-            }
-
-            renderStoredName();
         });
     </script>
 </body>

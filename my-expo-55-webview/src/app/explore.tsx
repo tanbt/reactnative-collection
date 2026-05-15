@@ -12,22 +12,27 @@ export default function ExploreScreen() {
   const { name } = useLocalSearchParams<{ name?: string; }>();
   const webViewRef = useRef<WebView>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const trimmedName = typeof name === 'string' ? name.trim() : '';
 
   useEffect(() => {
-    if (!isLoaded || !trimmedName) {
+    if (!isLoaded) {
       return;
     }
 
     webViewRef.current?.injectJavaScript(`
-      window.localStorage.setItem('rnName', ${JSON.stringify(trimmedName)});
-      const localStorageContent = document.getElementById('local-storage-content');
-      if (localStorageContent) {
-        localStorageContent.textContent = ${JSON.stringify(trimmedName)};
+      try {
+        const rnName = ${JSON.stringify(name)};
+        // alert(${JSON.stringify(`Hello from ${name}!`)});
+        window.localStorage.setItem('rnName', rnName);
+        const localStorageContent = document.getElementById('local-storage-content');
+        if (localStorageContent) {
+          localStorageContent.textContent = rnName;
+        }
+      } catch (error) {
+        console.error('injectJavaScript failed:', error);
       }
       true;
     `);
-  }, [isLoaded, trimmedName]);
+  }, [isLoaded, name]);
 
   const handleLoadEnd = () => {
     setIsLoaded(true);
