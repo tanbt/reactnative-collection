@@ -94,6 +94,7 @@
     <main>
         <h1>My local site</h1>
         <p>This is a local site.</p>
+        <p id="is-run-on-webview"></p>
         <form id="name-form">
             <label for="name">Name</label>
             <input id="name" name="name" type="text" placeholder="Enter your name" />
@@ -133,6 +134,16 @@
             const enteredName = nameInput.value.trim();
             jsContent.textContent = enteredName ? enteredName : 'Please enter a name.';
         });
+
+        function isWebView() {
+            const userAgent = navigator.userAgent || navigator.vendor;
+            return /wv|WebView|WebKit/.test(userAgent);
+        }
+
+        const isRunOnWebView = document.getElementById('is-run-on-webview');
+        if (isRunOnWebView) {
+            isRunOnWebView.textContent = isWebView() ? 'Running on WebView' :  JSON.stringify(navigator.userAgent || navigator.vendor);
+        }
     </script>
 </body>
 
